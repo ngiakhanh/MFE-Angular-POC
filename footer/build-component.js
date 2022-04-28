@@ -2,7 +2,7 @@ const exec = require('child_process').exec;
 exec(
   'npm publish --access public',
   {
-    cwd: 'dist/footer'
+    cwd: 'dist/footer-web-element'
   },
   (error, stdout, stderr) => {
     console.log(stdout);

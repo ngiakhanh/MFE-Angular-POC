@@ -1,12 +1,14 @@
 {
-  "name": "@ngiakhanh96/footer",
-  "version": "1.0.8",
-  "main": "footer.js",
+  "name": "@ngiakhanh96/footer-web-element",
+  "version": "1.0.0",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "files": ["footer.js", "style.css"]
+  "files": [
+    "footer.js",
+    "styles.css"
+  ]
 }

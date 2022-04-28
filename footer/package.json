@@ -7,9 +7,9 @@
     "build": "ng build --output-hashing none && npm run concat",
     "watch": "npm run build --watch --configuration development",
     "test": "ng test",
-    "concat": "concat-glob-cli -f dist/**/*.js -o dist/footer/footer.js",
-    "cpy": "cpy package-build.json dist/footer --rename=package.json",
-    "publish:footer": "npm run build && npm run cpy && node build-component.js"
+    "concat": "concat-glob-cli -f dist/footer-web-element/*.js -o dist/footer-web-element/footer.js",
+    "cpy": "cpy package-build.json dist/footer-web-element --rename=package.json",
+    "publish:footer": "npm run build && npm run concat && npm run cpy && node build-component.js"
   },
   "dependencies": {
     "@angular/animations": "~13.3.0",
@@ -32,12 +32,14 @@
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "concat-glob-cli": "^0.1.0",
+    "cpy-cli": "^4.1.0",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "ng-packagr": "^13.0.0",
     "typescript": "~4.6.2"
   }
 }

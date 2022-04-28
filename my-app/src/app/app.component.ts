@@ -1,8 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
-import 'ngiakhanh96/footer';
-import 'web-component-essentials';
+import '@ngiakhanh96/footer';
 
 @Component({
   selector: 'my-app-root',
