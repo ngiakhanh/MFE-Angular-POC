@@ -1,0 +1,7 @@
+{
+  "urlMap": {
+    "app1": "http://localhost:4201/main.js",
+    "app2": "http://localhost:4202/main.js",
+    "header": "http://localhost:4203/main.js"
+  }
+}

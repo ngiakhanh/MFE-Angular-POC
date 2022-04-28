@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
+import 'ngiakhanh96/footer';
+import 'web-component-essentials';
 
 @Component({
   selector: 'my-app-root',
@@ -13,7 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('container', {static: true}) private container!: ElementRef;
 
   constructor(private service: SingleSpaService) {
-    
+
   }
 
   ngOnInit(): void {
@@ -27,8 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   onClick(appName: string): void {
-    const unmountIfAny: Observable<null> = 
-      this.currentActiveApp 
+    const unmountIfAny: Observable<null> =
+      this.currentActiveApp
         ? this.service.unmount(this.currentActiveApp)
         : of(null);
     unmountIfAny.pipe(
