@@ -4,12 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --output-hashing none && npm run concat",
+    "build": "ng build footer-web-element --output-hashing none && npm run concat",
     "watch": "npm run build --watch --configuration development",
     "test": "ng test",
     "concat": "concat-glob-cli -f dist/footer-web-element/*.js -o dist/footer-web-element/footer.js",
     "cpy": "cpy package-build.json dist/footer-web-element --rename=package.json",
-    "publish:footer": "npm run build && npm run concat && npm run cpy && node build-component.js"
+    "publish:footer": "npm run build && npm run concat && npm run cpy && node publish-package.js"
   },
   "dependencies": {
     "@angular/animations": "^16.1.1",

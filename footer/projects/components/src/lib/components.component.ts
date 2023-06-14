@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'lib-components',
   template: `
     <p>
-      components works!
+      Footer works!
     </p>
   `,
   styles: [
