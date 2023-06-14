@@ -5,8 +5,7 @@ import '@ngiakhanh96/footer';
 
 @Component({
   selector: 'my-app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'my-app';
