@@ -1,11 +1,13 @@
 {
-  "name": "@ngiakhanh96/footer",
-  "version": "1.0.11",
-  "main": "footer.js",
-  "description": "",
-  "scripts": {
-  },
-  "author": "",
-  "license": "ISC",
-  "files": ["footer.js", "style.css"]
+	"name": "@ngiakhanh96/footer",
+	"version": "1.0.14",
+	"main": "footer.js",
+	"description": "",
+	"scripts": {},
+	"author": "",
+	"license": "ISC",
+	"files": [
+		"footer.js",
+		"style.css"
+	]
 }

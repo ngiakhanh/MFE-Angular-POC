@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
-import '@ngiakhanh96/footer';
+//import '@ngiakhanh96/footer';
 
 @Component({
   selector: 'my-app-root',
@@ -10,6 +10,7 @@ import '@ngiakhanh96/footer';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'my-app';
   currentActiveApp: string = 'app1';
+  footerUrl = './../../assets/footer.js';
   @ViewChild('container', {static: true}) private container!: ElementRef;
 
   constructor(private service: SingleSpaService) {
@@ -17,7 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.onClick(this.currentActiveApp);
+    // this.onClick(this.currentActiveApp);
   }
 
   ngOnDestroy() {

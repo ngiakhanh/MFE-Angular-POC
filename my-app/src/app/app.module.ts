@@ -7,6 +7,7 @@ import { ParcelModule } from 'single-spa-angular/parcel';
 import { AppSettingsService } from 'src/service/app-settings.service';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
+import { LazyElementsModule } from '@angular-extensions/elements';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { HeaderComponent } from './header/header.component';
     BrowserModule,
     AppRoutingModule,
     ParcelModule,
-    HttpClientModule
+    HttpClientModule,
+    LazyElementsModule
   ],
   providers: [{
     provide: APP_INITIALIZER,

@@ -37,9 +37,7 @@
               "node_modules/systemjs/dist/system.min.js",
               "node_modules/systemjs/dist/extras/amd.min.js",
               "node_modules/systemjs/dist/extras/named-exports.min.js",
-              "node_modules/systemjs/dist/extras/named-register.min.js",
-              "node_modules/import-map-overrides/dist/import-map-overrides.js",
-              "node_modules/@ngiakhanh96/footer/footer.js"
+              "node_modules/systemjs/dist/extras/named-register.min.js"
             ]
           },
           "configurations": {

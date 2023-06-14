@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-extensions/elements": "^16.0.0",
     "@angular/animations": "^16.1.0",
     "@angular/common": "^16.1.0",
     "@angular/compiler": "^16.1.0",
@@ -18,8 +19,6 @@
     "@angular/platform-browser": "^16.1.0",
     "@angular/platform-browser-dynamic": "^16.1.0",
     "@angular/router": "^16.1.0",
-    "@ngiakhanh96/footer": "^1.0.11",
-    "import-map-overrides": "^3.0.0",
     "rxjs": "~7.5.0",
     "single-spa": "^5.9.4",
     "single-spa-angular": "^8.1.0",
