@@ -1,43 +1,43 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable, of, switchMap } from 'rxjs';
+import {Component, OnInit, WritableSignal, signal } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
-//import '@ngiakhanh96/footer';
 
 @Component({
   selector: 'my-app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent implements OnInit, OnDestroy {
-  title = 'my-app';
+export class AppComponent implements OnInit {
+  title = 'shell';
   currentActiveApp: string = 'app1';
-  footerUrl = './../../assets/footer.js';
-  @ViewChild('container', {static: true}) private container!: ElementRef;
+  mountRootParcel = mountRootParcel;
+  configObs: Observable<ParcelConfig | null> | undefined = undefined;
+  config: WritableSignal<ParcelConfig | null> = signal(null);
 
-  constructor(private service: SingleSpaService) {
+  constructor(private singleSpaService: SingleSpaService) {
 
   }
 
   ngOnInit(): void {
-    // this.onClick(this.currentActiveApp);
-  }
-
-  ngOnDestroy() {
-    if (this.currentActiveApp) {
-      this.service.unmount(this.currentActiveApp);
-    }
+    this.onClick(this.currentActiveApp);
   }
 
   onClick(appName: string): void {
-    const unmountIfAny: Observable<null> =
-      this.currentActiveApp
-        ? this.service.unmount(this.currentActiveApp)
-        : of(null);
-    unmountIfAny.pipe(
-      switchMap(_ => {
-        this.currentActiveApp = appName;
-        return this.service.mount(appName, this.container.nativeElement);
-      }
-    ))
-    .subscribe();
+    this.configObs = this.singleSpaService.getMfeParcelConfig(appName);
+
+    //single-spa-angular still in angular 15
+    //this.singleSpaService.getMfeParcelConfig(appName).subscribe(config => this.config.set(config));
+
+    // const unmountIfAny: Observable<null> =
+    //   this.currentActiveApp
+    //     ? this.singleSpaService.unmount(this.currentActiveApp)
+    //     : of(null);
+    // unmountIfAny.pipe(
+    //   switchMap(_ => {
+    //     this.currentActiveApp = appName;
+    //     return this.singleSpaService.mount(appName, this.container.nativeElement);
+    //   }
+    // ))
+    // .subscribe();
   }
 }

@@ -9,13 +9,26 @@ import { IAppSettings } from 'src/type/app-settings.interface';
 export class AppSettingsService {
 
   private appConfig: IAppSettings | undefined;
+  private appConfigMap: Map<string, {url: string, isSingleSpa: boolean}> = new Map<string, {url: string, isSingleSpa: boolean}>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
   loadAppConfig() {
-    return firstValueFrom(this.http.get<IAppSettings>('/assets/app-settings.json'))
+    return firstValueFrom(this.httpClient.get<IAppSettings>('/assets/app-settings.json'))
       .then(data => {
         this.appConfig = data;
+        for (const mfe in this.appConfig.singleSpa) {
+          this.appConfigMap.set(mfe, {
+            url: this.appConfig.singleSpa[mfe],
+            isSingleSpa: true
+          });
+        }
+        for (const mfe in this.appConfig.element) {
+          this.appConfigMap.set(mfe, {
+            url: this.appConfig.element[mfe],
+            isSingleSpa: false
+          });
+        }
       });
   }
 
@@ -24,6 +37,6 @@ export class AppSettingsService {
       throw Error('Config file not loaded!');
     }
 
-    return this.appConfig.urlMap[appName];
+    return this.appConfigMap.get(appName)?.url ?? '';
   }
 }

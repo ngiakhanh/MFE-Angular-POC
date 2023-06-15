@@ -1,4 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { mountRootParcel, ParcelConfig } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
 
 @Component({
@@ -6,14 +8,11 @@ import { SingleSpaService } from 'src/service/single-spa.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
+  mountRootParcel = mountRootParcel;
+  configObs: Observable<ParcelConfig | null>;
 
-  @ViewChild('headerContainer', {static: true}) private headerContainer!: ElementRef;
-
-  constructor(private service: SingleSpaService) {
-  }
-
-  ngOnInit(): void {
-    this.service.mount('header', this.headerContainer.nativeElement).subscribe();
+  constructor(private singleSpaService: SingleSpaService) {
+    this.configObs = this.singleSpaService.getMfeParcelConfig('header');
   }
 }

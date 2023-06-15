@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Parcel, mountRootParcel,  } from 'single-spa';
+import { Injectable, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Parcel, ParcelConfig, mountRootParcel,  } from 'single-spa';
 import { Observable, from, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { AppSettingsService } from './app-settings.service';
@@ -29,6 +30,10 @@ export class SingleSpaService {
         .pipe(
           tap(() => delete this.loadedParcels[appName]),
           map(_ => null))
-      : of(null) ;
+      : of(null);
+  }
+
+  getMfeParcelConfig(appName: string): Observable<ParcelConfig | null> {
+    return from(window.System.import(this.appSettingsService.getMfeUrl(appName)));
   }
 }

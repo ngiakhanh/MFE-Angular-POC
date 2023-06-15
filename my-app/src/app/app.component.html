@@ -1,7 +1,7 @@
 <div>{{title}}</div>
 <my-app-header></my-app-header>
-<button (click)="onClick('app1')">Show App1</button>
+<button class="testt" (click)="onClick('app1')">Show App1</button>
 <button (click)="onClick('app2')">Show App2</button>
-<div #container></div>
-<k-footer *axLazyElement="footerUrl"></k-footer>
+<parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel>
+<my-app-footer></my-app-footer>
 

@@ -1,18 +1,14 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'footer',
-  template: `
-    <p>
-      Footer works! {{currentDateTimeString}}
-    </p>
-  `,
+  selector: 'app',
+  templateUrl: './app.component.html',
   styles: [
   ]
 })
 export class AppComponent {
   currentDateTimeString: string;
-
+  title = 'footer';
   constructor() {
     this.currentDateTimeString = Date();
   }

@@ -1,5 +1,8 @@
 export interface IAppSettings {
-  urlMap : {
+  singleSpa: {
+    [key: string]: string
+  }
+  element: {
     [key: string]: string
   }
 }

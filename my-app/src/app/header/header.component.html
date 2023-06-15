@@ -1,1 +1,1 @@
-<div #headerContainer></div>
+<parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel>

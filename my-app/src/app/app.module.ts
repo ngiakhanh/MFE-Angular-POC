@@ -8,11 +8,13 @@ import { AppSettingsService } from 'src/service/app-settings.service';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { LazyElementsModule } from '@angular-extensions/elements';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
    ],
   imports: [
     BrowserModule,
