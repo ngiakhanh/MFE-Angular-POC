@@ -3,6 +3,9 @@ export interface IAppSettings {
     [key: string]: string
   }
   element: {
-    [key: string]: string
+    [key: string]: {
+      url: string,
+      tag: string
+    }
   }
 }

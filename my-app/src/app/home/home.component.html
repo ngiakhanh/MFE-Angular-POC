@@ -1,0 +1,6 @@
+<div>{{title}}</div>
+<my-app-header></my-app-header>
+<button class="testt" (click)="onClick('app1')">Show App1</button>
+<button (click)="onClick('app2')">Show App2</button>
+<parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel>
+<my-app-footer></my-app-footer>

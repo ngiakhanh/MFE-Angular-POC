@@ -5,6 +5,10 @@
     "header": "http://localhost:4203/main.js"
   },
   "element": {
-    "footer": "http://localhost:4204/main.js"
+    "footer":
+    {
+      "url": "http://localhost:4204/main.js",
+      "tag": "k-footer"
+    }
   }
 }

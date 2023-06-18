@@ -9,7 +9,7 @@ import { IAppSettings } from 'src/type/app-settings.interface';
 export class AppSettingsService {
 
   private appConfig: IAppSettings | undefined;
-  private appConfigMap: Map<string, {url: string, isSingleSpa: boolean}> = new Map<string, {url: string, isSingleSpa: boolean}>();
+  appConfigMap: Map<string, {url: string, tag?: string, isSingleSpa: boolean}> = new Map();
 
   constructor(private httpClient: HttpClient) { }
 
@@ -25,10 +25,12 @@ export class AppSettingsService {
         }
         for (const mfe in this.appConfig.element) {
           this.appConfigMap.set(mfe, {
-            url: this.appConfig.element[mfe],
+            url: this.appConfig.element[mfe].url,
+            tag: this.appConfig.element[mfe].tag,
             isSingleSpa: false
           });
         }
+        return this.appConfigMap;
       });
   }
 

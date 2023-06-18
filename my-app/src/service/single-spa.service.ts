@@ -2,7 +2,7 @@ import { Injectable, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Parcel, ParcelConfig, mountRootParcel,  } from 'single-spa';
 import { Observable, from, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { catchError, first, map, tap } from 'rxjs/operators';
 import { AppSettingsService } from './app-settings.service';
 
 @Injectable({
@@ -34,6 +34,6 @@ export class SingleSpaService {
   }
 
   getMfeParcelConfig(appName: string): Observable<ParcelConfig | null> {
-    return from(window.System.import(this.appSettingsService.getMfeUrl(appName)));
+    return from(window.System.import(this.appSettingsService.getMfeUrl(appName))).pipe(catchError(err => of(null)));
   }
 }

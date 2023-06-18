@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app2-empty-route',
+  selector: 'mfe-page-not-found',
   template: '',
 })
 export class EmptyRouteComponent {}

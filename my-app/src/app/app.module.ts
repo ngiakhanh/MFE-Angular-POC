@@ -9,12 +9,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { LazyElementsModule } from '@angular-extensions/elements';
 import { FooterComponent } from './footer/footer.component';
+import { Router, Routes } from '@angular/router';
+import { MfeRouteHostComponent } from './mfe-route-host/mfe-route-host.component';
+import { HomeComponent } from './home/home.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    MfeRouteHostComponent,
+    HomeComponent,
+    NotFoundComponent
    ],
   imports: [
     BrowserModule,
@@ -26,11 +33,29 @@ import { FooterComponent } from './footer/footer.component';
   providers: [{
     provide: APP_INITIALIZER,
     multi: true,
-    deps: [AppSettingsService],
-    useFactory: (appSettingsService: AppSettingsService) => {
-      return () => {
-        //Make sure to return a promise!
-        return appSettingsService.loadAppConfig();
+    deps: [AppSettingsService, Router],
+    useFactory: (appSettingsService: AppSettingsService, router: Router) => {
+      return async () => {
+        const config = await appSettingsService.loadAppConfig();
+        const routes: Routes = Array.from(config, ([key, value]) => ({ key, value })).map(route => {
+          return {
+            path: route.key,
+            component: MfeRouteHostComponent,
+            data: {
+              mfeName: route.key,
+              isSingleSpa: route.value.isSingleSpa,
+              tag: route.value.tag,
+              url: route.value.url
+            },
+            children: [
+              {
+                path: '**',
+                component: MfeRouteHostComponent
+              }
+            ]
+          };
+        });
+        router.resetConfig([...routes, ...router.config]);
       };
     }
   }],
