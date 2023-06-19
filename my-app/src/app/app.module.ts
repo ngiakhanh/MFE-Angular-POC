@@ -40,7 +40,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
         const routes: Routes = Array.from(config, ([key, value]) => ({ key, value })).map(route => {
           return {
             path: route.key,
-            component: MfeRouteHostComponent,
             data: {
               mfeName: route.key,
               isSingleSpa: route.value.isSingleSpa,
