@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng run app1:serve-local",
     "build": "ng build app1",
-    "watch": "ng build --watch --configuration development",
+    "watch": "ng build app1 --watch --configuration development",
     "test": "ng test",
     "build:single-spa:app1": "ng build app1 --configuration production",
-    "serve:single-spa:app1": "ng s --project app1 --disable-host-check --port 4201"
+    "serve:single-spa:app1": "ng s --project app1"
   },
   "private": true,
   "dependencies": {
