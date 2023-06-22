@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Parcel, ParcelConfig, mountRootParcel,  } from 'single-spa';
 import { Observable, from, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AppSettingsService } from './app-settings.service';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class SingleSpaService {
       ? from(window.System.import(this.appSettingsService.getMfeUrl(appName)))
         .pipe(
           tap(app => this.loadedParcels[appName] = mountRootParcel(app, { domElement })),
-          map(_ => null))
+          switchMap(_ => from(this.loadedParcels[appName].mountPromise)))
       : of(null);
   }
 

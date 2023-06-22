@@ -13,6 +13,7 @@ import { Router, Routes } from '@angular/router';
 import { MfeRouteHostComponent } from './mfe-route-host/mfe-route-host.component';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ElementComponent } from './element/element.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     FooterComponent,
     MfeRouteHostComponent,
     HomeComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ElementComponent
    ],
   imports: [
     BrowserModule,
