@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { ChangeDetectorRef, Directive, Inject, Input, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
 import { defer, of, mergeMap } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
+import { Parcel } from 'single-spa';
 
 @Directive({
   selector: '[lazyElement]'
@@ -16,7 +17,6 @@ export class ElementDirective {
   }
 
   @Input('lazyElementAppName') set appName(v: string){
-    this._oldAppName = this.tagName;
     this._appName = v;
   }
 
@@ -25,7 +25,7 @@ export class ElementDirective {
   }
 
   private _appName!: string;
-  private _oldAppName!: string;
+  private _currentParcel: Parcel | undefined;
   private _tagName!: string;
   private _currentMfeContainer: HTMLElement | undefined;
   constructor(
@@ -44,8 +44,8 @@ export class ElementDirective {
 
     this._currentMfeContainer ??= this.document.createElement('div');
     defer(() =>
-      this._oldAppName
-        ? this.singleSpaService.unmount(this._oldAppName)
+      this._currentParcel && this._currentParcel.getStatus() === 'MOUNTED'
+        ? this._currentParcel.unmount()
         : of(null)
     ).pipe(
       mergeMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!)),
@@ -63,8 +63,8 @@ export class ElementDirective {
     });
   }
 
-  ngOnDestroy(): void {
-    this.singleSpaService.unmount(this.appName);
+  async ngOnDestroy() {
+    await this._currentParcel?.unmount()
     this._currentMfeContainer?.remove();
   }
 

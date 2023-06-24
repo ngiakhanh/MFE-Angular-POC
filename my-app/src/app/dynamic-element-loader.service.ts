@@ -1,77 +1,67 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, ElementRef, Inject, Injectable, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
-import { defer, of, mergeMap } from 'rxjs';
+import { ElementRef, EmbeddedViewRef, Inject, Injectable, Renderer2, RendererFactory2, TemplateRef, ViewContainerRef } from '@angular/core';
+import { NgElement, WithProperties } from '@angular/elements';
+import { of, mergeMap, Observable, map } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DynamicElementLoaderService {
-  private _oldAppName!: string;
   private _currentMfeContainer: HTMLElement | undefined;
+  private renderer: Renderer2;
   constructor(
     private singleSpaService: SingleSpaService,
-    private cdr: ChangeDetectorRef,
-    private renderer: Renderer2,
+    private rendererFactory: RendererFactory2,
     @Inject(DOCUMENT) private document: Document) {
+      this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
-  loadElement(
+  loadElement<T>(
     appName: string,
     tagName: string,
     vcr: ViewContainerRef,
-    elementSetupFn: (element: HTMLElement) => void): void {
-    if (appName || tagName) {
-      return;
+    elementSetupFn: (element: NgElement & WithProperties<T>) => void): Observable<NgElement & WithProperties<T> | undefined>{
+    if (!appName || !tagName || !vcr) {
+      return of(undefined);
     }
 
     this._currentMfeContainer ??= this.document.createElement('div');
-    defer(() =>
-      this._oldAppName
-        ? this.singleSpaService.unmount(this._oldAppName)
-        : of(null)
-    ).pipe(
-      mergeMap(_ => this.singleSpaService.mount(appName, this._currentMfeContainer!)),
-      mergeMap(_ => customElements.whenDefined(tagName))
-    )
-    .subscribe(_ => {
-      vcr.clear();
-      const element = this.document.createElement(tagName);
-      elementSetupFn(element);
-      (vcr.element as ElementRef<HTMLElement>).nativeElement.appendChild(element);
-      this.cdr.markForCheck();
-    });
+    return this.singleSpaService.mount(appName, this._currentMfeContainer!).pipe(
+      mergeMap(_ => customElements.whenDefined(tagName)),
+      map(_ => {
+        vcr.clear();
+        const element: NgElement & WithProperties<T> = this.document.createElement(tagName) as any;
+        elementSetupFn(element);
+        const beforeNode = (vcr.element as ElementRef<HTMLElement>).nativeElement;
+        beforeNode.parentNode?.insertBefore(element, beforeNode.nextSibling);
+        return element;
+      })
+    );
   }
 
   loadElementByTemplate(
     appName: string,
     tagName: string,
     vcr: ViewContainerRef,
-    template: TemplateRef<HTMLElement>): void {
-    if (appName || tagName) {
-      return;
+    template: TemplateRef<HTMLElement>): Observable<EmbeddedViewRef<HTMLElement> | undefined> {
+    if (!appName || !tagName || !vcr) {
+      return of(undefined);
     }
-    //single-spa-angular still in angular 15
-    //this.singleSpaService.getMfeParcelConfig('app2').subscribe(config => this.config.set(config));
+
     this._currentMfeContainer ??= this.document.createElement('div');
-    defer(() =>
-      this._oldAppName
-        ? this.singleSpaService.unmount(this._oldAppName)
-        : of(null)
-    ).pipe(
-      this._takeUntilDestroyed,
-      mergeMap(_ => this.singleSpaService.mount(appName, this._currentMfeContainer!)),
-      mergeMap(_ => customElements.whenDefined(tagName))
+    return this.singleSpaService.mount(appName, this._currentMfeContainer!).pipe(
+      mergeMap(_ => customElements.whenDefined(tagName)),
+      map(_ => {
+        vcr.clear();
+        const originalCreateElement = this.renderer.createElement;
+        this.renderer.createElement = (name: string, namespace: string) => {
+          return this.document.createElement(tagName);
+        };
+        const viewRef = vcr.createEmbeddedView(template);
+        this.renderer.createElement = originalCreateElement;
+        return viewRef;
+      })
     )
-    .subscribe(_ => {
-      vcr.clear();
-      const originalCreateElement = this.renderer.createElement;
-      this.renderer.createElement = (name: string, namespace: string) => {
-        return this.document.createElement(tagName);
-      };
-      vcr.createEmbeddedView(template);
-      this.renderer.createElement = originalCreateElement;
-      this.cdr.markForCheck();
-    });
   }
 }

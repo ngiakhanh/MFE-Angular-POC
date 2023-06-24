@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy } from '@angular/core';
 import { defer, mergeMap, of } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
+import { Parcel } from 'single-spa';
 
 @Component({
   selector: 'my-app-element',
@@ -11,7 +12,6 @@ import { SingleSpaService } from 'src/service/single-spa.service';
 })
 export class ElementComponent implements OnChanges, OnDestroy {
   @Input() set appName(v: string){
-    this._oldAppName = this.tagName;
     this._appName = v;
   }
 
@@ -28,7 +28,7 @@ export class ElementComponent implements OnChanges, OnDestroy {
   }
 
   private _appName!: string;
-  private _oldAppName!: string;
+  private _currentParcel: Parcel | undefined;
   private _tagName!: string;
   private _currentMfeContainer: HTMLElement | undefined;
   constructor(
@@ -44,20 +44,23 @@ export class ElementComponent implements OnChanges, OnDestroy {
 
     this._currentMfeContainer ??= this.document.createElement('div');
     defer(() =>
-      this._oldAppName
-        ? this.singleSpaService.unmount(this._oldAppName)
+      this._currentParcel && this._currentParcel.getStatus() === 'MOUNTED'
+        ? this._currentParcel.unmount()
         : of(null)
     ).pipe(
       mergeMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!)),
-      mergeMap(_ => customElements.whenDefined(this.tagName))
+      mergeMap(parcel => {
+        this._currentParcel = parcel;
+        return customElements.whenDefined(this.tagName)
+      })
     )
     .subscribe(_ => {
       this.cdr.markForCheck();
     });
   }
 
-  ngOnDestroy(): void {
-    this.singleSpaService.unmount(this.appName);
+  async ngOnDestroy() {
+    await this._currentParcel?.unmount();
     this._currentMfeContainer?.remove();
   }
 }

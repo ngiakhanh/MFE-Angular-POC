@@ -2,13 +2,25 @@
 <my-app-header></my-app-header>
 <button class="testt" (click)="onClick('app1')">Show App1</button>
 <button (click)="onClick('app2')">Show App2</button>
-<div>Single SPA Parcel</div>
-<!-- <parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel> -->
+<h3>MFE</h3>
+<div>MFE Single SPA Parcel Component</div>
+<parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel>
+<div>Manual MFE Parcel Mount</div>
+<div #container0></div>
+<h3>Element</h3>
 <div>New Element Component</div>
-<!-- <my-app-element [appName]="currentActiveApp" [tagName]="currentActiveTag">
+<my-app-element [appName]="currentActiveApp" [tagName]="currentActiveTag">
   <app-one *ngIf="currentActiveApp === 'app1'" [input]="clickString" (customClick)="onElementClick($event)"></app-one>
   <app-two *ngIf="currentActiveApp === 'app2'" [input]="clickString"></app-two>
-</my-app-element> -->
+</my-app-element>
 <div>New Element Directive</div>
 <element-directive *lazyElement="currentActiveTag, appName: currentActiveApp" [input]="clickString" (customClick)="onElementClick($event)"></element-directive>
+<div>New Dynamic Element Loader Service</div>
+<ng-container #container></ng-container>
+<div>New Dynamic Element Loader Service By Template</div>
+<ng-container #container2></ng-container>
+<ng-template #template>
+  <app-one *ngIf="currentActiveApp === 'app1'" [input]="clickString" (customClick)="onElementClick($event)"></app-one>
+  <app-two *ngIf="currentActiveApp === 'app2'" [input]="clickString"></app-two>
+</ng-template>
 <my-app-footer></my-app-footer>
