@@ -1,30 +1,27 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy } from '@angular/core';
-import { defer, mergeMap, of } from 'rxjs';
+import { ChangeDetectorRef, Directive, Inject, Input, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
+import { defer, of, mergeMap } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 
-@Component({
-  selector: 'my-app-element',
-  templateUrl: './element.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./element.component.scss']
+@Directive({
+  selector: '[lazyElement]'
 })
-export class ElementComponent implements OnChanges, OnDestroy {
-  @Input() set appName(v: string){
+export class ElementDirective {
+  @Input('lazyElement') set tagName(v: string){
+    this._tagName = v;
+  }
+
+  get tagName(): string {
+    return this._tagName;
+  }
+
+  @Input('lazyElementAppName') set appName(v: string){
     this._oldAppName = this.tagName;
     this._appName = v;
   }
 
   get appName(): string {
     return this._appName;
-  }
-
-  @Input() set tagName(v: string){
-    this._tagName = v;
-  }
-
-  get tagName(): string {
-    return this._tagName;
   }
 
   private _appName!: string;
@@ -34,6 +31,9 @@ export class ElementComponent implements OnChanges, OnDestroy {
   constructor(
     private singleSpaService: SingleSpaService,
     private cdr: ChangeDetectorRef,
+    private template: TemplateRef<HTMLElement>,
+    private vcr: ViewContainerRef,
+    private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document) {
   }
 
@@ -52,6 +52,13 @@ export class ElementComponent implements OnChanges, OnDestroy {
       mergeMap(_ => customElements.whenDefined(this.tagName))
     )
     .subscribe(_ => {
+      this.vcr.clear();
+      const originalCreateElement = this.renderer.createElement;
+      this.renderer.createElement = (name: string, namespace: string) => {
+        return this.document.createElement(this.tagName);
+      };
+      this.vcr.createEmbeddedView(this.template);
+      this.renderer.createElement = originalCreateElement;
       this.cdr.markForCheck();
     });
   }
@@ -60,4 +67,5 @@ export class ElementComponent implements OnChanges, OnDestroy {
     this.singleSpaService.unmount(this.appName);
     this._currentMfeContainer?.remove();
   }
+
 }

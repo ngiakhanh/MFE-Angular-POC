@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, signal } from '@angular/core';
+import { Component, OnInit, WritableSignal, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';

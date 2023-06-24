@@ -4,9 +4,11 @@
 <button (click)="onClick('app2')">Show App2</button>
 <div>Single SPA Parcel</div>
 <!-- <parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel> -->
-<div>New Element</div>
-<my-app-element [appName]="currentActiveApp" [tagName]="currentActiveTag">
+<div>New Element Component</div>
+<!-- <my-app-element [appName]="currentActiveApp" [tagName]="currentActiveTag">
   <app-one *ngIf="currentActiveApp === 'app1'" [input]="clickString" (customClick)="onElementClick($event)"></app-one>
   <app-two *ngIf="currentActiveApp === 'app2'" [input]="clickString"></app-two>
-</my-app-element>
+</my-app-element> -->
+<div>New Element Directive</div>
+<element-directive *lazyElement="currentActiveTag, appName: currentActiveApp" [input]="clickString" (customClick)="onElementClick($event)"></element-directive>
 <my-app-footer></my-app-footer>

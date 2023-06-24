@@ -11,7 +11,7 @@ export class AppComponent {
 
   @HostListener('click')
   handleClick = () => {
-    this.clickEvent.emit('new click' + new Date());
+    this.clickEvent.emit(new Date());
   }
   title = 'app1';
 }

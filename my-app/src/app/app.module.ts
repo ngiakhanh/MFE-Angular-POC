@@ -14,6 +14,7 @@ import { MfeRouteHostComponent } from './mfe-route-host/mfe-route-host.component
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ElementComponent } from './element/element.component';
+import { ElementDirective } from './element.directive';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ElementComponent } from './element/element.component';
     MfeRouteHostComponent,
     HomeComponent,
     NotFoundComponent,
-    ElementComponent
+    ElementComponent,
+    ElementDirective
    ],
   imports: [
     BrowserModule,

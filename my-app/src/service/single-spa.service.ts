@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Parcel, ParcelConfig, mountRootParcel,  } from 'single-spa';
 import { Observable, from, of } from 'rxjs';
-import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, mergeMap, tap } from 'rxjs/operators';
 import { AppSettingsService } from './app-settings.service';
 
 @Injectable({
