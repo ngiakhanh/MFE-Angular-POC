@@ -1,15 +1,16 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, Renderer2, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, Renderer2, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, signal, AfterViewChecked, OnDestroy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subscription, defer, of, switchMap } from 'rxjs';
+import { Subscription, defer, mergeMap, of, switchMap } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 
 @Component({
   selector: 'my-app-element',
   templateUrl: './element.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./element.component.scss']
 })
-export class ElementComponent implements OnChanges {
+export class ElementComponent implements OnChanges, OnDestroy {
   @Input() set appName(v: string){
     this._oldAppName = this.tagName;
     this._appName = v;
@@ -32,12 +33,13 @@ export class ElementComponent implements OnChanges {
   private _oldAppName!: string;
   private _tagName!: string;
   private _subs: Subscription = new Subscription();
-  private _currentComponent: HTMLElement | undefined;
+  private _currentElement: HTMLElement | undefined;
   private _currentMfeContainer: HTMLElement | undefined;
   constructor(
     private singleSpaService: SingleSpaService,
     private cdr: ChangeDetectorRef,
     private host: ElementRef<HTMLElement>,
+    private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document) {
   }
 
@@ -47,8 +49,7 @@ export class ElementComponent implements OnChanges {
     }
     //single-spa-angular still in angular 15
     //this.singleSpaService.getMfeParcelConfig('app2').subscribe(config => this.config.set(config));
-    this._currentMfeContainer?.remove();
-    this._currentMfeContainer = this.document.createElement('div');
+    this._currentMfeContainer ??= this.document.createElement('div');
     this._subs.unsubscribe();
     this._subs = defer(() =>
       this._oldAppName
@@ -56,13 +57,19 @@ export class ElementComponent implements OnChanges {
         : of(null)
     ).pipe(
       this._takeUntilDestroyed,
-      switchMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!))
+      mergeMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!)),
+      mergeMap(() => customElements.whenDefined(this.tagName))
     )
     .subscribe(_ => {
-      this._currentComponent?.remove();
-      this._currentComponent = this.document.createElement(this.tagName);
-      this.host.nativeElement.appendChild(this._currentComponent);
+      // this._currentElement?.remove();
+      // this._currentElement = this.document.createElement(this.tagName);
+      // this.host.nativeElement.appendChild(this._currentElement);
       this.cdr.markForCheck();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.singleSpaService.unmount(this.appName);
+    this._currentMfeContainer?.remove();
   }
 }

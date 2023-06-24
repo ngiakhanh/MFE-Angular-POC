@@ -15,7 +15,7 @@ import { EmptyRouteComponent } from './empty-route/empty-route.component';
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: []
 })
 export class AppModule {
   constructor(private injector: Injector){}

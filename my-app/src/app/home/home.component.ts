@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit  {
   mountRootParcel = mountRootParcel;
   configObs: Observable<ParcelConfig | null> | undefined = undefined;
   config: WritableSignal<ParcelConfig | null> = signal(null);
+  clickString: string = '';
 
   constructor(
     private singleSpaService: SingleSpaService) {
@@ -22,6 +23,11 @@ export class HomeComponent implements OnInit  {
 
   ngOnInit(): void {
     this.onClick(this.currentActiveApp);
+  }
+
+  onElementClick(event: Event) {
+    console.log(event);
+    this.clickString = (event as CustomEvent<string>).detail;
   }
 
   onClick(appName: string): void {
