@@ -1,9 +1,8 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, signal } from '@angular/core';
-import { Observable, defer, mergeMap, of } from 'rxjs';
+import { Observable, catchError, defer, mergeMap, of } from 'rxjs';
 import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { DynamicElementLoaderService } from '../dynamic-element-loader.service';
-import { NgElement, WithProperties } from '@angular/elements';
 import { Parcel } from 'single-spa';
 
 @Component({
@@ -25,7 +24,7 @@ export class HomeComponent implements OnInit  {
   @ViewChild('container2', {static: true, read: ViewContainerRef}) container2!: ViewContainerRef;
   @ViewChild('template', {static: true, read: TemplateRef}) template!: TemplateRef<any>;
 
-  private element: NgElement & WithProperties<{input: string}> | undefined;
+  private element: (HTMLElement & {input: string}) | undefined;
   private currentParcel: Parcel | undefined;
   constructor(
     private singleSpaService: SingleSpaService,
@@ -53,37 +52,41 @@ export class HomeComponent implements OnInit  {
       this.currentActiveTag = 'app-two';
     }
 
-    //
+    //MFE Single SPA Parcel Component
     this.configObs = this.singleSpaService.getMfeParcelConfig(appName);
 
-    //
+    //Manual MFE Parcel Mount
     defer(() =>
       this.currentParcel && this.currentParcel.getStatus() === 'MOUNTED'
         ? this.currentParcel.unmount()
         : of(null)
     )
-      .pipe(mergeMap(_ => this.singleSpaService.mount(appName, this.container0.nativeElement)))
-      .subscribe(parcel => {
+      .pipe(
+        mergeMap(_ => this.singleSpaService.mount(appName, this.container0.nativeElement)),
+        catchError(err => of(null))
+      )
+      .subscribe((parcel: any) => {
         this.currentParcel = parcel;
       });
 
-    //
+    //New Dynamic Element Loader Service
     this.element?.remove();
     this.dynamicElementLoaderService
       .loadElement<{input: string}>(
         this.currentActiveApp,
         this.currentActiveTag,
-        this.container,
-        (element) => {
+        this.container)
+      .subscribe(element => {
+        if (element) {
+          this.element = element;
           element.input = this.clickString;
-          element.addEventListener('customClick', (event) => {
+          (element as any).addEventListener('customClick', (event: CustomEvent<string>) => {
             this.onElementClick(event);
-            element.input = this.clickString;
           });
-        })
-      .subscribe(element => this.element = element);
+        }
+      });
 
-    //
+    //New Dynamic Element Loader Service By Template
     this.dynamicElementLoaderService
       .loadElementByTemplate(
         this.currentActiveApp,

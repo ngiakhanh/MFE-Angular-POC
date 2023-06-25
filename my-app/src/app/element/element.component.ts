@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy } from '@angular/core';
-import { defer, mergeMap, of } from 'rxjs';
+import { catchError, defer, mergeMap, of } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';
 
@@ -48,13 +48,11 @@ export class ElementComponent implements OnChanges, OnDestroy {
         ? this._currentParcel.unmount()
         : of(null)
     ).pipe(
-      mergeMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!)),
-      mergeMap(parcel => {
-        this._currentParcel = parcel;
-        return customElements.whenDefined(this.tagName)
-      })
+      mergeMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!, {isElement: true})),
+      mergeMap(parcel => customElements.whenDefined(this.tagName).then(_ => parcel))
     )
-    .subscribe(_ => {
+    .subscribe(parcel => {
+      this._currentParcel = parcel;
       this.cdr.markForCheck();
     });
   }

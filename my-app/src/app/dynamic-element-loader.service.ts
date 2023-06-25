@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { ElementRef, EmbeddedViewRef, Inject, Injectable, Renderer2, RendererFactory2, TemplateRef, ViewContainerRef } from '@angular/core';
-import { NgElement, WithProperties } from '@angular/elements';
 import { of, mergeMap, Observable, map } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 
@@ -20,19 +19,17 @@ export class DynamicElementLoaderService {
   loadElement<T>(
     appName: string,
     tagName: string,
-    vcr: ViewContainerRef,
-    elementSetupFn: (element: NgElement & WithProperties<T>) => void): Observable<NgElement & WithProperties<T> | undefined>{
+    vcr: ViewContainerRef): Observable<HTMLElement & T | undefined>{
     if (!appName || !tagName || !vcr) {
       return of(undefined);
     }
 
     this._currentMfeContainer ??= this.document.createElement('div');
-    return this.singleSpaService.mount(appName, this._currentMfeContainer!).pipe(
+    return this.singleSpaService.mount(appName, this._currentMfeContainer!, {isElement: true}).pipe(
       mergeMap(_ => customElements.whenDefined(tagName)),
       map(_ => {
         vcr.clear();
-        const element: NgElement & WithProperties<T> = this.document.createElement(tagName) as any;
-        elementSetupFn(element);
+        const element: HTMLElement & T = this.document.createElement(tagName) as any;
         const beforeNode = (vcr.element as ElementRef<HTMLElement>).nativeElement;
         beforeNode.parentNode?.insertBefore(element, beforeNode.nextSibling);
         return element;
@@ -50,7 +47,7 @@ export class DynamicElementLoaderService {
     }
 
     this._currentMfeContainer ??= this.document.createElement('div');
-    return this.singleSpaService.mount(appName, this._currentMfeContainer!).pipe(
+    return this.singleSpaService.mount(appName, this._currentMfeContainer!, {isElement: true}).pipe(
       mergeMap(_ => customElements.whenDefined(tagName)),
       map(_ => {
         vcr.clear();

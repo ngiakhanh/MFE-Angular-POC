@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Parcel, ParcelConfig, mountRootParcel,  } from 'single-spa';
+import { Parcel, ParcelConfig, mountRootParcel, CustomProps } from 'single-spa';
 import { Observable, defer, from, of } from 'rxjs';
 import { catchError, mergeMap, tap } from 'rxjs/operators';
 import { AppSettingsService } from './app-settings.service';
@@ -14,17 +14,17 @@ export class SingleSpaService {
 
   constructor(private appSettingsService: AppSettingsService) { }
 
-  mount(appName: string, domElement: HTMLElement): Observable<Parcel | undefined> {
+  mount(appName: string, domElement: HTMLElement, customProps: CustomProps={}): Observable<Parcel | undefined> {
     return !this.loadedParcels[appName]
       ? from(window.System.import(this.appSettingsService.getMfeUrl(appName)))
         .pipe(
           mergeMap(app => {
             this.loadedParcels[appName] = app;
-            const parcel = mountRootParcel(app, { domElement });
+            const parcel = mountRootParcel(app, {...customProps, domElement });
             return parcel.mountPromise.then(_ => parcel);
           }))
       : defer(() => {
-        const parcel = mountRootParcel(this.loadedParcels[appName]!, { domElement });
+        const parcel = mountRootParcel(this.loadedParcels[appName]!, {...customProps, domElement });
         return parcel.mountPromise.then(_ => parcel);
       });
   }

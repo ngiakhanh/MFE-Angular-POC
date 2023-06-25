@@ -9,6 +9,7 @@ import { singleSpaAngular, getSingleSpaExtraProviders } from 'single-spa-angular
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { singleSpaPropsSubject } from './single-spa/single-spa-props';
+import { AppElementModule } from './app/app-element.module';
 
 if (environment.production) {
   enableProdMode();
@@ -17,6 +18,9 @@ if (environment.production) {
 const lifecycles = singleSpaAngular({
   bootstrapFunction: singleSpaProps => {
     singleSpaPropsSubject.next(singleSpaProps);
+    if ((singleSpaProps as any).isElement) {
+      return platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppElementModule);
+    }
     return platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppModule);
   },
   template: '<app1-root />',

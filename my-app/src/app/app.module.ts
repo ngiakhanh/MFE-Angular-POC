@@ -14,7 +14,8 @@ import { MfeRouteHostComponent } from './mfe-route-host/mfe-route-host.component
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ElementComponent } from './element/element.component';
-import { ElementDirective } from './element.directive';
+import { ElementDirective } from './lazy-dynamic-element.directive';
+import { LazyElementDirective } from './lazy-element.directive';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ElementDirective } from './element.directive';
     HomeComponent,
     NotFoundComponent,
     ElementComponent,
-    ElementDirective
+    ElementDirective,
+    LazyElementDirective
    ],
   imports: [
     BrowserModule,

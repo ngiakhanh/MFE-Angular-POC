@@ -1,4 +1,4 @@
-import { ApplicationRef, Injector, NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -6,7 +6,7 @@ import { EmptyRouteComponent } from './empty-route/empty-route.component';
 import { ChildComponent } from './child/child.component';
 import { SiblingComponent } from './sibling/sibling.component';
 import { Sibling2Component } from './sibling2/sibling2.component';
-import { createCustomElement } from '@angular/elements';
+import { AppElementModule } from './app-element.module';
 
 @NgModule({
   declarations: [
@@ -18,20 +18,12 @@ import { createCustomElement } from '@angular/elements';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AppElementModule
   ],
   providers: [],
-  bootstrap: []
+  bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(private injector: Injector, private app: ApplicationRef){}
-
-  ngDoBootstrap(){
-    if (!customElements.get("app-one")) {
-      const element = createCustomElement(AppComponent, { injector: this.injector })
-      customElements.define("app-one", element);
-    }
-
-    this.app.bootstrap(AppComponent);
-  }
+  constructor(private injector: Injector){}
  }

@@ -7,16 +7,8 @@ import { Parcel } from 'single-spa';
 @Directive({
   selector: '[lazyElement]'
 })
-export class ElementDirective {
-  @Input('lazyElement') set tagName(v: string){
-    this._tagName = v;
-  }
-
-  get tagName(): string {
-    return this._tagName;
-  }
-
-  @Input('lazyElementAppName') set appName(v: string){
+export class LazyElementDirective {
+  @Input('lazyElement') set appName(v: string){
     this._appName = v;
   }
 
@@ -38,7 +30,8 @@ export class ElementDirective {
   }
 
   ngOnChanges(): void {
-    if (!this.appName || !this.tagName) {
+    this._tagName = this.getElementTag();
+    if (!this.appName || !this._tagName) {
       return;
     }
 
@@ -48,17 +41,12 @@ export class ElementDirective {
         ? this._currentParcel.unmount()
         : of(null)
     ).pipe(
-      mergeMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!)),
-      mergeMap(_ => customElements.whenDefined(this.tagName))
+      mergeMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!, {isElement: true})),
+      mergeMap(_ => customElements.whenDefined(this._tagName))
     )
     .subscribe(_ => {
       this.vcr.clear();
-      const originalCreateElement = this.renderer.createElement;
-      this.renderer.createElement = (name: string, namespace: string) => {
-        return this.document.createElement(this.tagName);
-      };
       this.vcr.createEmbeddedView(this.template);
-      this.renderer.createElement = originalCreateElement;
       this.cdr.markForCheck();
     });
   }
@@ -68,4 +56,10 @@ export class ElementDirective {
     this._currentMfeContainer?.remove();
   }
 
+  private getElementTag(): string {
+    const tpl = this.template as any;
+    return tpl._declarationTContainer
+      ? tpl._declarationTContainer.tagName || tpl._declarationTContainer.value
+      : tpl._def.element.template.nodes[0].element.name;
+  }
 }
