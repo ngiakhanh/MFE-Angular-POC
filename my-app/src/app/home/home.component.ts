@@ -4,6 +4,7 @@ import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { DynamicElementLoaderService } from '../dynamic-element-loader.service';
 import { Parcel } from 'single-spa';
+import { AppSettingsService } from 'src/service/app-settings.service';
 
 @Component({
   selector: 'my-app-home',
@@ -28,7 +29,8 @@ export class HomeComponent implements OnInit  {
   private currentParcel: Parcel | undefined;
   constructor(
     private singleSpaService: SingleSpaService,
-    private dynamicElementLoaderService: DynamicElementLoaderService) {
+    private dynamicElementLoaderService: DynamicElementLoaderService,
+    public appSettingsService: AppSettingsService) {
   }
 
   ngOnInit(): void {

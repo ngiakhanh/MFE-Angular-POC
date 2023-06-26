@@ -3,13 +3,15 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import { start } from 'single-spa';
+import { LAZY_ELEMENT_OPTIONS } from './app/lazy-element-token';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
-
-start();
+fetch('/assets/lazy-element-config.json').then(async res => {
+  const config = await res.json();
+  platformBrowserDynamic([
+    { provide: LAZY_ELEMENT_OPTIONS, useValue: config}
+  ]).bootstrapModule(AppModule).catch(err => console.error(err));
+});

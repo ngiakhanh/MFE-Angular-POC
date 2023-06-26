@@ -5,18 +5,18 @@ import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';
 
 @Directive({
-  selector: '[lazyElement]'
+  selector: '[lazyElementByUrl]'
 })
-export class LazyElementDirective {
-  @Input('lazyElement') set appName(v: string){
-    this._appName = v;
+export class LazyElementByUrlDirective {
+  @Input('lazyElementByUrl') set url(v: string){
+    this._url = v;
   }
 
-  get appName(): string {
-    return this._appName;
+  get url(): string {
+    return this._url;
   }
 
-  private _appName!: string;
+  private _url!: string;
   private _currentParcel: Parcel | undefined;
   private _tagName!: string;
   private _currentMfeContainer: HTMLElement | undefined;
@@ -30,7 +30,7 @@ export class LazyElementDirective {
 
   ngOnChanges(): void {
     this._tagName = this.getElementTag();
-    if (!this.appName || !this._tagName) {
+    if (!this.url || !this._tagName) {
       return;
     }
 
@@ -40,7 +40,7 @@ export class LazyElementDirective {
         ? this._currentParcel.unmount()
         : of(null)
     ).pipe(
-      mergeMap(_ => this.singleSpaService.mount(this.appName, this._currentMfeContainer!, {isElement: true})),
+      mergeMap(_ => this.singleSpaService.mountByUrl(this.url, this._currentMfeContainer!, {isElement: true})),
       mergeMap(_ => customElements.whenDefined(this._tagName))
     )
     .subscribe(_ => {

@@ -3,10 +3,10 @@
 <button class="testt" (click)="onClick('app1')">Show App1</button>
 <button (click)="onClick('app2')">Show App2</button>
 <h3>MFE</h3>
-<div>MFE Single SPA Parcel Component</div>
+<!-- <div>MFE Single SPA Parcel Component</div>
 <parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel>
 <div>Manual MFE Parcel Mount</div>
-<div #container0></div>
+<div #container0></div> -->
 <h3>Element</h3>
 <div>New Element Component (has error if standalone)</div>
 <my-app-element [appName]="currentActiveApp" [tagName]="currentActiveTag">
@@ -30,4 +30,11 @@
   <app-one *ngIf="currentActiveApp === 'app1'" [input]="clickString" (customClick)="onElementClick($event)"></app-one>
   <app-two *ngIf="currentActiveApp === 'app2'" [input]="clickString"></app-two>
 </ng-template>
+<!-- <div>New Element Directive By Url</div>
+<ng-container *ngIf="currentActiveApp === 'app1'">
+  <app-one *lazyElementByUrl="appSettingsService.getMfeUrl(currentActiveApp)" [input]="clickString" (customClick)="onElementClick($event)"/>
+</ng-container>
+<ng-container *ngIf="currentActiveApp === 'app2'">
+<app-two *lazyElementByUrl="appSettingsService.getMfeUrl(currentActiveApp)" [input]="clickString" (customClick)="onElementClick($event)"/>
+</ng-container> -->
 <my-app-footer></my-app-footer>

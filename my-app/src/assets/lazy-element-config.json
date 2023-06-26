@@ -1,0 +1,3 @@
+{
+  "urlToPrefetch": ["http://localhost:4201/main.js", "http://localhost:4202/main.js"]
+}

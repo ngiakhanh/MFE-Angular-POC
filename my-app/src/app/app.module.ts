@@ -7,15 +7,13 @@ import { ParcelModule } from 'single-spa-angular/parcel';
 import { AppSettingsService } from 'src/service/app-settings.service';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
-import { LazyElementsModule } from '@angular-extensions/elements';
 import { FooterComponent } from './footer/footer.component';
 import { Router, Routes } from '@angular/router';
 import { MfeRouteHostComponent } from './mfe-route-host/mfe-route-host.component';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { ElementComponent } from './element/element.component';
-import { ElementDirective } from './lazy-dynamic-element.directive';
-import { LazyElementDirective } from './lazy-element.directive';
+import { LazyElementModule } from './lazy-element.module';
+import { LazyElementsModule } from '@angular-extensions/elements';
 
 @NgModule({
   declarations: [
@@ -24,17 +22,15 @@ import { LazyElementDirective } from './lazy-element.directive';
     FooterComponent,
     MfeRouteHostComponent,
     HomeComponent,
-    NotFoundComponent,
-    ElementComponent,
-    ElementDirective,
-    LazyElementDirective
+    NotFoundComponent
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ParcelModule,
     HttpClientModule,
-    LazyElementsModule
+    LazyElementsModule,
+    LazyElementModule
   ],
   providers: [{
     provide: APP_INITIALIZER,

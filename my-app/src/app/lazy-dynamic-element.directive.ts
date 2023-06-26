@@ -7,7 +7,7 @@ import { Parcel } from 'single-spa';
 @Directive({
   selector: '[lazyDynamicElement]'
 })
-export class ElementDirective {
+export class LazyDynamicElementDirective {
   @Input('lazyDynamicElement') set tagName(v: string){
     this._tagName = v;
   }
