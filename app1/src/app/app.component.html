@@ -1,4 +1,5 @@
-<h1 class="test" (click)="handleClick()">Mien's first Micro Front-end projectss</h1>
+<h1 class="test" (click)="handleClick($event)">Mien's first Micro Front-end projectss</h1>
 <router-outlet></router-outlet>
 <div>{{input}}</div>
-<app1-element [input]="input" (customClick)="handleClick()"/>
+<app-one [input]="input" (customClick)="handleClick($event)"></app-one>
+<!-- <app1-element [input]="input" (customClick)="handleClick()"/> -->

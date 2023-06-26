@@ -9,7 +9,8 @@ export class AppComponent implements OnChanges {
   @Input() input: string = 'No input';
   @Output('customClick') clickEvent = new EventEmitter();
 
-  handleClick = () => {
+  handleClick = (event: Event) => {
+    console.log(event);
     this.input = new Date() + '';
   }
   title = 'app1';

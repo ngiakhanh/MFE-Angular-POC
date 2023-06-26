@@ -4,7 +4,7 @@
 <button (click)="onClick('app2')">Show App2</button>
 <h3>MFE</h3>
 <div>MFE Single SPA Parcel Component</div>
-<!-- <parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel> -->
+<parcel *ngIf="configObs | async as config" [config]="config" [mountParcel]="mountRootParcel"></parcel>
 <div>Manual MFE Parcel Mount</div>
 <div #container0></div>
 <h3>Element</h3>
@@ -14,6 +14,13 @@
   <app-two *ngIf="currentActiveApp === 'app2'" [input]="clickString"></app-two>
 </my-app-element>
 <div>New Element Directive</div>
+<ng-container *ngIf="currentActiveApp === 'app1'">
+  <app-one *lazyElement="currentActiveApp" [input]="clickString" (customClick)="onElementClick($event)"/>
+</ng-container>
+<ng-container *ngIf="currentActiveApp === 'app2'">
+<app-two *lazyElement="currentActiveApp" [input]="clickString" (customClick)="onElementClick($event)"/>
+</ng-container>
+<div>New Dynamic Element Directive</div>
 <element-directive *lazyDynamicElement="currentActiveTag, appName: currentActiveApp" [input]="clickString" (customClick)="onElementClick($event)"></element-directive>
 <div>New Dynamic Element Loader Service</div>
 <ng-container #container></ng-container>

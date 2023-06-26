@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy } from '@angular/core';
-import { catchError, defer, mergeMap, of } from 'rxjs';
+import { defer, mergeMap, of } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';
 

@@ -21,6 +21,7 @@ const lifecycles = singleSpaAngular({
     if ((singleSpaProps as any).isElement) {
       return platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppElementModule);
     }
+    platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppElementModule);
     return platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppModule);
   },
   template: '<app2-root />',
