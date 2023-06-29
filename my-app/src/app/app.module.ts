@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LazyElementModule } from './lazy-element.module';
 import { LazyElementsModule } from '@angular-extensions/elements';
+import { TestModule } from './test.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { LazyElementsModule } from '@angular-extensions/elements';
     ParcelModule,
     HttpClientModule,
     LazyElementsModule,
-    LazyElementModule
+    LazyElementModule,
+    TestModule
   ],
   providers: [{
     provide: APP_INITIALIZER,
