@@ -6,6 +6,9 @@ import { EmptyRouteComponent } from './empty-route/empty-route.component';
 import { ChildComponent } from './child/child.component';
 import { SiblingComponent } from './sibling/sibling.component';
 import { Sibling2Component } from './sibling2/sibling2.component';
+import { Sandbox } from './sandbox';
+import { AppSandbox } from './app-sandbox';
+import { ShareModule } from './modules/share/share.module';
 
 @NgModule({
   declarations: [
@@ -17,9 +20,13 @@ import { Sibling2Component } from './sibling2/sibling2.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ShareModule
   ],
-  providers: [],
+  providers: [{
+    provide: Sandbox,
+    useExisting: AppSandbox
+  }],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

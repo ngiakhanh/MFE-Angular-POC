@@ -8,6 +8,12 @@ import { Sibling2Component } from './sibling2/sibling2.component';
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    loadChildren: () => import('./modules/lazy/lazy.module').then((m) => m.LazyModule),
+  }
+  ,
+  {
     path: 'app1',
     component: ChildComponent,
     children: [
