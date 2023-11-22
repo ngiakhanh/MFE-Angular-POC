@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Signal, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { mountRootParcel, ParcelConfig } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
@@ -10,9 +11,9 @@ import { SingleSpaService } from 'src/service/single-spa.service';
 })
 export class HeaderComponent {
   mountRootParcel = mountRootParcel;
-  configObs: Observable<ParcelConfig | null>;
+  config: Signal<ParcelConfig | null> = signal(null);
 
   constructor(private singleSpaService: SingleSpaService) {
-    this.configObs = this.singleSpaService.getMfeParcelConfig('header');
+    this.config = toSignal(this.singleSpaService.getMfeParcelConfig('header'), { initialValue: null});
   }
 }
