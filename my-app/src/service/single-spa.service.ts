@@ -58,12 +58,12 @@ export class SingleSpaService {
       });
   }
 
-  getMfeParcelConfig(appName: string): Observable<ParcelConfig | undefined> {
+  getMfeParcelConfig(appName: string): Observable<ParcelConfig | null> {
     return this.loadedParcels[appName] != null
       ? of(this.loadedParcels[appName] as ParcelConfig)
       : from(window.System.import(this.appSettingsService.getMfeUrl(appName)))
           .pipe(
             tap(app => this.loadedParcels[appName] = app),
-            catchError(err => of(undefined)));
+            catchError(err => of(null)));
   }
 }

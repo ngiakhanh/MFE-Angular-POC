@@ -20,7 +20,7 @@ export class MfeRouteHostComponent implements AfterViewChecked {
     this.route.data.pipe(
       takeUntilDestroyed(),
       switchMap(
-        (data) => {
+        (data: any) => {
           if (data['isSingleSpa']) {
             this.isSingleSpa = true;
             return this.singleSpaService.getMfeParcelConfig(data['mfeName']).pipe(

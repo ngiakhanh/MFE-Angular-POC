@@ -1,10 +1,12 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, signal } from '@angular/core';
-import { Observable, catchError, defer, mergeMap, of } from 'rxjs';
+import { Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, inject, signal } from '@angular/core';
+import { Observable, Subscribable, catchError, defer, mergeMap, of } from 'rxjs';
 import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { DynamicElementLoaderService } from '../dynamic-element-loader.service';
 import { Parcel } from 'single-spa';
 import { AppSettingsService } from 'src/service/app-settings.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Signal } from '@angular/core';
 
 @Component({
   selector: 'my-app-home',
@@ -16,8 +18,7 @@ export class HomeComponent implements OnInit  {
   currentActiveApp: string = 'app1';
   currentActiveTag: string = 'app-one';
   mountRootParcel = mountRootParcel;
-  configObs: Observable<ParcelConfig | undefined> | undefined = undefined;
-  config: WritableSignal<ParcelConfig | null> = signal(null);
+  config: Signal<ParcelConfig | null> = signal(null);
   clickString: string = '';
 
   @ViewChild('container0', {static: true, read: ElementRef}) container0!: ElementRef;
@@ -27,6 +28,7 @@ export class HomeComponent implements OnInit  {
 
   private element: (HTMLElement & {input: string}) | undefined;
   private currentParcel: Parcel | undefined;
+  private injector: Injector = inject(Injector);
   constructor(
     private singleSpaService: SingleSpaService,
     private dynamicElementLoaderService: DynamicElementLoaderService,
@@ -55,7 +57,7 @@ export class HomeComponent implements OnInit  {
     }
 
     //MFE Single SPA Parcel Component
-    this.configObs = this.singleSpaService.getMfeParcelConfig(appName);
+    this.config = toSignal(this.singleSpaService.getMfeParcelConfig(appName), { initialValue: null, injector: this.injector });
 
     //Manual MFE Parcel Mount
     defer(() =>
@@ -63,13 +65,13 @@ export class HomeComponent implements OnInit  {
         ? this.currentParcel.unmount()
         : of(null)
     )
-      .pipe(
-        mergeMap(_ => this.singleSpaService.mount(appName, this.container0.nativeElement)),
-        catchError(err => of(null))
-      )
-      .subscribe((parcel: any) => {
-        this.currentParcel = parcel;
-      });
+    .pipe(
+      mergeMap(_ => this.singleSpaService.mount(appName, this.container0.nativeElement)),
+      catchError(err => of(null))
+    )
+    .subscribe((parcel: any) => {
+      this.currentParcel = parcel;
+    });
 
     //New Dynamic Element Loader Service
     this.element?.remove();

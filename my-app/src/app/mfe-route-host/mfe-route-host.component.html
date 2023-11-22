@@ -1,5 +1,8 @@
-<parcel *ngIf="config && isSingleSpa === true" [config]="config" [mountParcel]="mountRootParcel"></parcel>
-<ng-container *ngIf="isSingleSpa === false">
+@if (config && isSingleSpa === true) {
+  <parcel [config]="config" [mountParcel]="mountRootParcel"></parcel>
+}
+
+@if (isSingleSpa === false) {
   <ax-lazy-element *axLazyElementDynamic="tag; url: url"/>
-</ng-container>
+}
 

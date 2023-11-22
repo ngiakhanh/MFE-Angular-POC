@@ -10,7 +10,7 @@ import { SingleSpaService } from 'src/service/single-spa.service';
 })
 export class HeaderComponent {
   mountRootParcel = mountRootParcel;
-  configObs: Observable<ParcelConfig | undefined>;
+  configObs: Observable<ParcelConfig | null>;
 
   constructor(private singleSpaService: SingleSpaService) {
     this.configObs = this.singleSpaService.getMfeParcelConfig('header');
