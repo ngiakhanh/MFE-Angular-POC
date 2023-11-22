@@ -148,10 +148,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app2:build-local:production"
+              "buildTarget": "app2:build-local:production"
             },
             "development": {
-              "browserTarget": "app2:build-local:development"
+              "buildTarget": "app2:build-local:development"
             }
           },
           "defaultConfiguration": "development",
@@ -163,7 +163,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "app2:build-local"
+            "buildTarget": "app2:build-local"
           }
         },
         "test": {
