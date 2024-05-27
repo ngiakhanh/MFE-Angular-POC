@@ -4,15 +4,13 @@ import { AppElementComponent } from './app-element.component';
 import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
-  declarations: [
-    AppElementComponent
-  ],
-  imports: [
-    BrowserModule,
-  ],
-  exports: [AppElementComponent],
-  providers: [],
-  bootstrap: []
+    imports: [
+        BrowserModule,
+        AppElementComponent,
+    ],
+    exports: [AppElementComponent],
+    providers: [],
+    bootstrap: []
 })
 export class AppElementModule {
   constructor(private injector: Injector){}

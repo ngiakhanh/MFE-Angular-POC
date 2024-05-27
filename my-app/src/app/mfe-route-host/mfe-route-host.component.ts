@@ -4,11 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, switchMap, tap } from 'rxjs';
 import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
+import { LazyElementsModule } from '@angular-extensions/elements';
+import { ParcelComponent } from 'single-spa-angular/parcel';
 
 @Component({
-  selector: 'my-app-mfe-route-host',
-  templateUrl: './mfe-route-host.component.html',
-  styleUrls: ['./mfe-route-host.component.scss']
+    selector: 'my-app-mfe-route-host',
+    templateUrl: './mfe-route-host.component.html',
+    styleUrls: ['./mfe-route-host.component.scss'],
+    standalone: true,
+    imports: [ParcelComponent, LazyElementsModule]
 })
 export class MfeRouteHostComponent implements AfterViewChecked {
   mountRootParcel = mountRootParcel;

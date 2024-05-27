@@ -11,8 +11,8 @@ describe('Lazy2Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ Lazy2Component ]
-    })
+    imports: [Lazy2Component]
+})
     .compileComponents();
   }));
 

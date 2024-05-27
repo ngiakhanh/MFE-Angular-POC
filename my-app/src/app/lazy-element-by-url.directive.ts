@@ -5,7 +5,8 @@ import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';
 
 @Directive({
-  selector: '[lazyElementByUrl]'
+    selector: '[lazyElementByUrl]',
+    standalone: true
 })
 export class LazyElementByUrlDirective {
   @Input('lazyElementByUrl') set url(v: string){

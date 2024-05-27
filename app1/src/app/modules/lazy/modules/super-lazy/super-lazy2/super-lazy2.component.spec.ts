@@ -11,8 +11,8 @@ describe('SuperLazy2Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SuperLazy2Component ]
-    })
+    imports: [SuperLazy2Component]
+})
     .compileComponents();
   }));
 

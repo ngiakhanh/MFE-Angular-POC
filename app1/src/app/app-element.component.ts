@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
-  selector: 'app1-element',
-  templateUrl: './app-element.component.html',
-  styleUrls: ['../styles.scss'] //workaround
+    selector: 'app1-element',
+    templateUrl: './app-element.component.html',
+    styleUrls: ['../styles.scss'] //workaround
+    ,
+    standalone: true
 })
 export class AppElementComponent implements OnChanges {
   @Input() input: string = 'No input';

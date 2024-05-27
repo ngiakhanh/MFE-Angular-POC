@@ -5,7 +5,8 @@ import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';
 
 @Directive({
-  selector: '[lazyDynamicElement]'
+    selector: '[lazyDynamicElement]',
+    standalone: true
 })
 export class LazyDynamicElementDirective {
   @Input('lazyDynamicElement') set tagName(v: string){

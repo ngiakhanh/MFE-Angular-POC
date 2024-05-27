@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LazyComponent } from './lazy.component';
 import { LazySandbox } from './lazy-sandbox';
 import { Sandbox } from 'src/app/sandbox';
-import { ShareModule } from '../share/share.module';
+
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
@@ -20,17 +20,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
+    imports: [
     CommonModule,
-    ShareModule,
-    RouterModule.forChild(routes)
-  ],
-  providers:[
-    {
-      provide: Sandbox,
-      useExisting: LazySandbox
-    }
-  ],
-  declarations: [LazyComponent, Lazy2Component]
+    RouterModule.forChild(routes),
+    LazyComponent, Lazy2Component
+],
+    providers: [
+        {
+            provide: Sandbox,
+            useExisting: LazySandbox
+        }
+    ]
 })
 export class LazyModule { }

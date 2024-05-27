@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SuperLazyComponent } from './super-lazy.component';
 import { Sandbox } from 'src/app/sandbox';
 import { Routes, RouterModule } from '@angular/router';
-import { ShareModule } from 'src/app/modules/share/share.module';
+
 import { SuperLazy2Component } from './super-lazy2/super-lazy2.component';
 import { SuperLazySandbox } from './super-lazy-sandbox';
 
@@ -15,17 +15,16 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
+    imports: [
     CommonModule,
-    ShareModule,
-    RouterModule.forChild(routes)
-  ],
-  providers:[
-    {
-      provide: Sandbox,
-      useExisting: SuperLazySandbox
-    }
-  ],
-  declarations: [SuperLazyComponent, SuperLazy2Component]
+    RouterModule.forChild(routes),
+    SuperLazyComponent, SuperLazy2Component
+],
+    providers: [
+        {
+            provide: Sandbox,
+            useExisting: SuperLazySandbox
+        }
+    ]
 })
 export class SuperLazyModule { }

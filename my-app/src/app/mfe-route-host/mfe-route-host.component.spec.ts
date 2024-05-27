@@ -8,8 +8,8 @@ describe('MfeRouteHostComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MfeRouteHostComponent]
-    });
+    imports: [MfeRouteHostComponent]
+});
     fixture = TestBed.createComponent(MfeRouteHostComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

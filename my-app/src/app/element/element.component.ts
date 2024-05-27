@@ -5,10 +5,11 @@ import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';
 
 @Component({
-  selector: 'my-app-element',
-  templateUrl: './element.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./element.component.scss']
+    selector: 'my-app-element',
+    templateUrl: './element.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrls: ['./element.component.scss'],
+    standalone: true
 })
 export class ElementComponent implements OnChanges, OnDestroy {
   @Input() set appName(v: string){

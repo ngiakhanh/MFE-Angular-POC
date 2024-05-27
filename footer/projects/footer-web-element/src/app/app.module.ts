@@ -4,12 +4,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  imports: [
-    BrowserModule
-  ],
-  declarations: [AppComponent],
-  providers: [],
-  bootstrap: [],
+    imports: [
+        BrowserModule,
+        AppComponent
+    ],
+    providers: [],
+    bootstrap: [],
 })
 export class AppModule {
   constructor(private injector: Injector){}

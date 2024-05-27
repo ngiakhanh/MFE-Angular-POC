@@ -8,21 +8,19 @@ import { SingleSpaService } from 'src/service/single-spa.service';
 import { LazyElementOptions, LAZY_ELEMENT_OPTIONS, LAZY_ELEMENT_PLATFORM_OPTIONS } from './lazy-element-token';
 
 @NgModule({
-  declarations: [
-    ElementComponent,
-    LazyDynamicElementDirective,
-    LazyElementDirective,
-    LazyElementByUrlDirective
-   ],
-  exports: [
-    ElementComponent,
-    LazyDynamicElementDirective,
-    LazyElementDirective,
-    LazyElementByUrlDirective
-  ],
-  imports: [
-    CommonModule
-  ],
+    exports: [
+        ElementComponent,
+        LazyDynamicElementDirective,
+        LazyElementDirective,
+        LazyElementByUrlDirective
+    ],
+    imports: [
+        CommonModule,
+        ElementComponent,
+        LazyDynamicElementDirective,
+        LazyElementDirective,
+        LazyElementByUrlDirective
+    ],
 })
 export class LazyElementModule {
   static configure(

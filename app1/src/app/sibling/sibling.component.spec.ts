@@ -8,8 +8,8 @@ describe('SiblingComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SiblingComponent]
-    });
+    imports: [SiblingComponent]
+});
     fixture = TestBed.createComponent(SiblingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

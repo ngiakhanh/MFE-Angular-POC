@@ -7,11 +7,20 @@ import { Parcel } from 'single-spa';
 import { AppSettingsService } from 'src/service/app-settings.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Signal } from '@angular/core';
+import { FooterComponent } from '../footer/footer.component';
+import { LazyElementByUrlDirective } from '../lazy-element-by-url.directive';
+import { LazyDynamicElementDirective } from '../lazy-dynamic-element.directive';
+import { LazyElementDirective } from '../lazy-element.directive';
+import { ElementComponent } from '../element/element.component';
+import { ParcelComponent } from 'single-spa-angular/parcel';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
-  selector: 'my-app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'my-app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: true,
+    imports: [HeaderComponent, ParcelComponent, ElementComponent, LazyElementDirective, LazyDynamicElementDirective, LazyElementByUrlDirective, FooterComponent]
 })
 export class HomeComponent implements OnInit  {
   title = 'shell';
