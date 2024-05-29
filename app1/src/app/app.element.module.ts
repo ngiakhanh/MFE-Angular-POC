@@ -3,14 +3,17 @@ import { createCustomElement } from '@angular/elements';
 import { AppElementComponent } from './app-element.component';
 import { BrowserModule } from '@angular/platform-browser';
 
+//angular element does not support standalone
 @NgModule({
-    imports: [
-        BrowserModule,
-        AppElementComponent,
-    ],
-    exports: [AppElementComponent],
-    providers: [],
-    bootstrap: []
+  declarations: [
+    AppElementComponent
+  ],
+  imports: [
+    BrowserModule,
+  ],
+  exports: [AppElementComponent],
+  providers: [],
+  bootstrap: []
 })
 export class AppElementModule {
   constructor(private injector: Injector){}

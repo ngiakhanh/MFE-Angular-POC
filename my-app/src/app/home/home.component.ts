@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, inject, signal } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, inject, signal, viewChild } from '@angular/core';
 import { Observable, Subscribable, catchError, defer, mergeMap, of } from 'rxjs';
 import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
@@ -20,17 +20,19 @@ import { HeaderComponent } from '../header/header.component';
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
     standalone: true,
-    imports: [HeaderComponent, ParcelComponent, ElementComponent, LazyElementDirective, LazyDynamicElementDirective, LazyElementByUrlDirective, FooterComponent]
+    imports: [HeaderComponent, ParcelComponent, ElementComponent, LazyElementDirective, LazyDynamicElementDirective, LazyElementByUrlDirective, FooterComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HomeComponent implements OnInit  {
-  title = 'shell';
-  currentActiveApp: string = 'app1';
-  currentActiveTag: string = 'app-one';
+  title: WritableSignal<string> = signal('shell');
+  currentActiveApp: string = 'app2';
+  currentActiveTag: string = 'app-two';
   mountRootParcel = mountRootParcel;
   config: Signal<ParcelConfig | null> = signal(null);
   clickString: string = '';
 
-  @ViewChild('container0', {static: true, read: ElementRef}) container0!: ElementRef;
+  container0 = viewChild.required('container0', {read: ElementRef});
+  // @ViewChild('container0', {static: true, read: ElementRef}) container0!: ElementRef;
   @ViewChild('container', {static: true, read: ViewContainerRef}) container!: ViewContainerRef;
   @ViewChild('container2', {static: true, read: ViewContainerRef}) container2!: ViewContainerRef;
   @ViewChild('template', {static: true, read: TemplateRef}) template!: TemplateRef<any>;
@@ -75,7 +77,7 @@ export class HomeComponent implements OnInit  {
         : of(null)
     )
     .pipe(
-      mergeMap(_ => this.singleSpaService.mount(appName, this.container0.nativeElement)),
+      mergeMap(_ => this.singleSpaService.mount(appName, this.container0().nativeElement)),
       catchError(err => of(null))
     )
     .subscribe((parcel: any) => {

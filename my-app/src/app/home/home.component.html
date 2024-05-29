@@ -1,17 +1,17 @@
-<div>{{title}}</div>
-<my-app-header></my-app-header>
+<div>{{title()}}</div>
+<!-- <my-app-header></my-app-header> -->
 <button class="testt" (click)="onClick('app1')">Show App1</button>
 <button (click)="onClick('app2')">Show App2</button>
 
 <h3>MFE</h3>
-<div>MFE Single SPA Parcel Component (has error if switching to app2 and back to app1)</div>
+<!-- <div>MFE Single SPA Parcel Component (has error if switching to app2 and back to app1)</div>
 @if (config()) {
   <parcel [config]="config()" [mountParcel]="mountRootParcel"/>
-}
+} -->
 <div>Manual MFE Parcel Mount</div>
 <div #container0></div>
 
-<h3>Element</h3>
+<!-- <h3>Element</h3>
 <div>New Element Component (has error if standalone)</div>
 <my-app-element [appName]="currentActiveApp" [tagName]="currentActiveTag">
   @if (currentActiveApp === 'app1') {
@@ -49,4 +49,4 @@
   @if (currentActiveApp === 'app2') {
     <app-two *lazyElementByUrl="appSettingsService.getMfeUrl(currentActiveApp)" [input]="clickString" (customClick)="onElementClick($event)"/>
   }
-<my-app-footer/>
+<my-app-footer/> -->

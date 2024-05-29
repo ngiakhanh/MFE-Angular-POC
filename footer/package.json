@@ -6,6 +6,7 @@
     "build": "ng build footer-web-element --configuration production --single-bundle --output-hashing none",
     "watch": "npm run build --watch --configuration development",
     "test": "ng test",
+    "start": "npm run serve-local",
     "serve-local": "npm run build && serve dist/footer-web-element -l 4204",
     "concat": "concat-glob-cli -f dist/footer-web-element/*.js -o dist/footer-web-element/footer.js",
     "cpy": "cpy package-build.json dist/footer-web-element --rename=package.json",

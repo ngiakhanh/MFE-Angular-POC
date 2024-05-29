@@ -1,15 +1,15 @@
-import { enableProdMode, APP_INITIALIZER, importProvidersFrom } from '@angular/core';
+import { enableProdMode, APP_INITIALIZER, importProvidersFrom, provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
 import { TestModule } from './app/test.module';
 import { LazyElementModule } from './app/lazy-element.module';
 import { LazyElementsModule } from '@angular-extensions/elements';
 import { ParcelModule } from 'single-spa-angular/parcel';
-import { AppRoutingModule } from './app/app-routing.module';
+import { routes } from './app/routes';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MfeRouteHostComponent } from './app/mfe-route-host/mfe-route-host.component';
-import { Router, Routes } from '@angular/router';
+import { Router, Routes, provideRouter } from '@angular/router';
 import { AppSettingsService } from 'src/service/app-settings.service';
 
 if (environment.production) {
@@ -19,7 +19,8 @@ if (environment.production) {
 fetch('/assets/lazy-element-config.json').then(async res => {
   bootstrapApplication(AppComponent, {
     providers: [
-        importProvidersFrom(BrowserModule, AppRoutingModule, ParcelModule, LazyElementsModule, LazyElementModule, TestModule),
+        provideRouter(routes),
+        importProvidersFrom(BrowserModule, ParcelModule, LazyElementsModule, LazyElementModule, TestModule),
         {
             provide: APP_INITIALIZER,
             multi: true,
@@ -48,7 +49,8 @@ fetch('/assets/lazy-element-config.json').then(async res => {
                 };
             }
         },
-        provideHttpClient(withInterceptorsFromDi())
+        provideHttpClient(withInterceptorsFromDi()),
+        // provideExperimentalZonelessChangeDetection(),
     ]
 }).catch(err => console.error(err));
 });

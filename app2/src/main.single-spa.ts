@@ -1,7 +1,7 @@
-import { enableProdMode, NgZone, importProvidersFrom } from '@angular/core';
+import { enableProdMode, NgZone, importProvidersFrom, provideExperimentalZonelessChangeDetection, provideZoneChangeDetection } from '@angular/core';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { Router, NavigationStart } from '@angular/router';
+import { Router, NavigationStart, provideRouter } from '@angular/router';
 
 import { singleSpaAngular, getSingleSpaExtraProviders } from 'single-spa-angular';
 
@@ -11,7 +11,7 @@ import { environment } from './environments/environment';
 import { singleSpaPropsSubject } from './single-spa/single-spa-props';
 import { AppElementModule } from './app/app-element.module';
 import { AppComponent } from './app/app.component';
-import { AppRoutingModule } from './app/app-routing.module';
+import { routes } from './app/routes';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 
 if (environment.production) {
@@ -26,13 +26,18 @@ const lifecycles = singleSpaAngular({
     }
     platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppElementModule);
     return bootstrapApplication(AppComponent, {
-    providers: [importProvidersFrom(BrowserModule, AppRoutingModule)]
-});
+      providers: [
+        ...getSingleSpaExtraProviders(),
+        importProvidersFrom(BrowserModule),
+        provideRouter(routes),
+        // provideExperimentalZonelessChangeDetection()
+      ]
+  });
   },
   template: '<app2-root />',
   Router,
   NavigationStart,
-  NgZone,
+  NgZone: 'noop',
 });
 
 export const bootstrap = lifecycles.bootstrap;

@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component } from '@angular/core';
+import { AfterViewChecked, CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, switchMap, tap } from 'rxjs';
@@ -12,7 +12,8 @@ import { ParcelComponent } from 'single-spa-angular/parcel';
     templateUrl: './mfe-route-host.component.html',
     styleUrls: ['./mfe-route-host.component.scss'],
     standalone: true,
-    imports: [ParcelComponent, LazyElementsModule]
+    imports: [ParcelComponent, LazyElementsModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MfeRouteHostComponent implements AfterViewChecked {
   mountRootParcel = mountRootParcel;

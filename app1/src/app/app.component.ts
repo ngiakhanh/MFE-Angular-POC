@@ -1,21 +1,20 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, input, output, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app1-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss', '../styles.scss'] //workaround
-    ,
+    styleUrls: ['./app.component.scss', '../styles.scss'], //workaround
     standalone: true,
-    imports: [RouterOutlet]
+    imports: [RouterOutlet],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppComponent implements OnChanges {
-  @Input() input: string = 'No input';
-  @Output('customClick') clickEvent = new EventEmitter();
+  inputTitle = signal('test');
 
   handleClick = (event: Event) => {
     console.log(event);
-    this.input = new Date() + '';
+    this.inputTitle.set(new Date() + '');
   }
   title = 'app1';
   ngOnChanges(changes: SimpleChanges): void {

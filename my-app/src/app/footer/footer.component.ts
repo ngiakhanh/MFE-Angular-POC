@@ -1,4 +1,4 @@
-import { Component, WritableSignal, signal } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, WritableSignal, signal } from '@angular/core';
 import { AppSettingsService } from 'src/service/app-settings.service';
 import { LazyElementsModule } from '@angular-extensions/elements';
 
@@ -7,7 +7,8 @@ import { LazyElementsModule } from '@angular-extensions/elements';
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss'],
     standalone: true,
-    imports: [LazyElementsModule]
+    imports: [LazyElementsModule],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FooterComponent {
   footerUrl: WritableSignal<string> = signal('');
