@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { TestDirective } from '../../../share/test.directive';
 import { SuperLazy2Component } from './super-lazy2/super-lazy2.component';
+import { Sandbox } from 'src/app/sandbox';
 
 @Component({
     selector: 'app-super-lazy',
@@ -10,7 +11,7 @@ import { SuperLazy2Component } from './super-lazy2/super-lazy2.component';
     imports: [SuperLazy2Component, TestDirective]
 })
 export class SuperLazyComponent implements OnInit {
-
+  sandbox = inject(Sandbox);
   constructor() { }
 
   ngOnInit() {

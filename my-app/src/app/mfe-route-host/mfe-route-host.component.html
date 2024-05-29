@@ -1,6 +1,6 @@
-<!-- @if (config && isSingleSpa) {
+@if (config && isSingleSpa) {
   <parcel [config]="config" [mountParcel]="mountRootParcel"/>
-} -->
+}
 
 @if (!isSingleSpa) {
   <ax-lazy-element *axLazyElementDynamic="tag; url: url"/>
