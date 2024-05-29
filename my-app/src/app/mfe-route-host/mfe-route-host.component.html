@@ -1,8 +1,8 @@
-@if (config && isSingleSpa) {
-  <parcel [config]="config" [mountParcel]="mountRootParcel"/>
+@if (config() && isSingleSpa()) {
+  <parcel [config]="config()" [mountParcel]="mountRootParcel()"/>
 }
 
-@if (!isSingleSpa) {
-  <ax-lazy-element *axLazyElementDynamic="tag; url: url"/>
+@if (!isSingleSpa()) {
+  <ax-lazy-element *axLazyElementDynamic="tag(); url: url()"/>
 }
 

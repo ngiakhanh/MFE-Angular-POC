@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, inject, signal, viewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, computed, inject, signal, viewChild } from '@angular/core';
 import { Observable, Subscribable, catchError, defer, mergeMap, of } from 'rxjs';
 import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
@@ -25,17 +25,17 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class HomeComponent implements OnInit  {
   title: WritableSignal<string> = signal('shell');
-  currentActiveApp: string = 'app2';
-  currentActiveTag: string = 'app-two';
-  mountRootParcel = mountRootParcel;
+  currentActiveApp = signal('app2');
+  currentActiveTag = signal('app-two');
+  mountRootParcel = signal(mountRootParcel);
   config: Signal<ParcelConfig | null> = signal(null);
-  clickString: string = '';
+  clickString = signal('');
+  mfeUrl = computed(() => this.appSettingsService.getMfeUrl(this.currentActiveApp()));
 
   container0 = viewChild.required('container0', {read: ElementRef});
-  // @ViewChild('container0', {static: true, read: ElementRef}) container0!: ElementRef;
-  @ViewChild('container', {static: true, read: ViewContainerRef}) container!: ViewContainerRef;
-  @ViewChild('container2', {static: true, read: ViewContainerRef}) container2!: ViewContainerRef;
-  @ViewChild('template', {static: true, read: TemplateRef}) template!: TemplateRef<any>;
+  container = viewChild.required('container', {read: ViewContainerRef});
+  container2 = viewChild.required('container2', {read: ViewContainerRef});
+  template = viewChild.required('template', {read: TemplateRef});
 
   private element: (HTMLElement & {input: string}) | undefined;
   private currentParcel: Parcel | undefined;
@@ -47,24 +47,24 @@ export class HomeComponent implements OnInit  {
   }
 
   ngOnInit(): void {
-    this.onClick(this.currentActiveApp);
+    this.onClick(this.currentActiveApp());
   }
 
   onElementClick(event: Event) {
     console.log(event);
-    this.clickString = (event as CustomEvent<string>).detail;
+    this.clickString.set((event as CustomEvent<string>).detail);
     if (this.element) {
-      this.element.input = this.clickString;
+      this.element.input = this.clickString();
     }
   }
 
   onClick(appName: string): void {
-    this.currentActiveApp = appName;
-    if (this.currentActiveApp === 'app1') {
-      this.currentActiveTag = 'app-one';
+    this.currentActiveApp.set(appName);
+    if (this.currentActiveApp() === 'app1') {
+      this.currentActiveTag.set('app-one');
     }
     else {
-      this.currentActiveTag = 'app-two';
+      this.currentActiveTag.set('app-two');
     }
 
     //MFE Single SPA Parcel Component
@@ -88,13 +88,13 @@ export class HomeComponent implements OnInit  {
     this.element?.remove();
     this.dynamicElementLoaderService
       .loadElement<{input: string}>(
-        this.currentActiveApp,
-        this.currentActiveTag,
-        this.container)
+        this.currentActiveApp(),
+        this.currentActiveTag(),
+        this.container())
       .subscribe(element => {
         if (element) {
           this.element = element;
-          element.input = this.clickString;
+          element.input = this.clickString();
           (element as any).addEventListener('customClick', (event: CustomEvent<string>) => {
             this.onElementClick(event);
           });
@@ -104,10 +104,10 @@ export class HomeComponent implements OnInit  {
     //New Dynamic Element Loader Service By Template
     this.dynamicElementLoaderService
       .loadElementByTemplate(
-        this.currentActiveApp,
-        this.currentActiveTag,
-        this.container2,
-        this.template)
+        this.currentActiveApp(),
+        this.currentActiveTag(),
+        this.container2(),
+        this.template())
       .subscribe();
   }
 }

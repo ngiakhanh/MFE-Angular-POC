@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 @Component({
     selector: 'app1-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss', '../styles.scss'], //workaround
+    styleUrls: ['./app.component.scss'],
     standalone: true,
     imports: [RouterOutlet],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]

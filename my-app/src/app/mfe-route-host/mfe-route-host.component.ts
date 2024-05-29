@@ -1,4 +1,4 @@
-import { AfterViewChecked, CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { AfterViewChecked, CUSTOM_ELEMENTS_SCHEMA, Component, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, switchMap, tap } from 'rxjs';
@@ -16,34 +16,35 @@ import { ParcelComponent } from 'single-spa-angular/parcel';
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MfeRouteHostComponent implements AfterViewChecked {
-  mountRootParcel = mountRootParcel;
-  config: ParcelConfig | null = null;
-  isSingleSpa: boolean | undefined;
-  tag: string | null = null;
-  url: string | null = null;
+  mountRootParcel = signal(mountRootParcel);
+  config = signal<ParcelConfig | null>(null);
+  isSingleSpa = signal<boolean | undefined>(undefined);
+  tag = signal<string | null>(null);
+  url = signal<string | null>(null);
   constructor(private route: ActivatedRoute, private singleSpaService: SingleSpaService, private router: Router) {
     this.route.data.pipe(
-      takeUntilDestroyed(),
       switchMap(
         (data: any) => {
           if (data['isSingleSpa']) {
-            this.isSingleSpa = true;
+            this.isSingleSpa.set(true);
             return this.singleSpaService.getMfeParcelConfig(data['mfeName']).pipe(
               tap(value => {
                 if (!value) {
                   setTimeout(() => this.router.navigate(['notfound']));
                 }
                 else {
-                  this.config = value;
+                  this.config.set(value);
                 }
               }));
           }
-          this.isSingleSpa = false;
-          this.tag = data['tag'];
-          this.url = data['url'];
+          this.isSingleSpa.set(false);
+          this.tag.set(data['tag']);
+          this.url.set(data['url']);
           return of(null);
-        })
-    ).subscribe();
+        }),
+      takeUntilDestroyed(),
+    )
+    .subscribe();
   }
 
   ngAfterViewChecked(): void {
