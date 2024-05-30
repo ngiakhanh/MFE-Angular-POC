@@ -1,1 +1,4 @@
-<ax-lazy-element *axLazyElementDynamic="'k-footer'; url: footerUrl()"/>
+@if(footerUrl()) {
+  <ax-lazy-element *axLazyElementDynamic="'k-footer'; url: footerUrl()"/>
+}
+

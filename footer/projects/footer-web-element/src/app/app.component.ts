@@ -1,17 +1,11 @@
-import { Component } from '@angular/core';
-import { NgSwitch, NgSwitchDefault, NgSwitchCase } from '@angular/common';
+import { Component, signal } from '@angular/core';
 
 @Component({
     selector: 'app',
     templateUrl: './app.component.html',
-    styles: [],
-    standalone: true,
-    imports: [NgSwitch, NgSwitchDefault, NgSwitchCase]
+    styles: []
 })
 export class AppComponent {
-  currentDateTimeString: string;
-  title = 'footer';
-  constructor() {
-    this.currentDateTimeString = Date();
-  }
+  currentDateTimeString = Date();
+  title = signal('footer');
 }

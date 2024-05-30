@@ -3,10 +3,13 @@ import { createCustomElement } from '@angular/elements';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
+//angular element does not support standalone
 @NgModule({
+    declarations: [
+      AppComponent
+    ],
     imports: [
-        BrowserModule,
-        AppComponent
+      BrowserModule
     ],
     providers: [],
     bootstrap: [],
