@@ -13,7 +13,7 @@ import { ParcelComponent } from 'single-spa-angular/parcel';
     imports: [ParcelComponent]
 })
 export class HeaderComponent {
-  mountRootParcel = mountRootParcel;
+  mountRootParcel = signal(mountRootParcel);
   config: Signal<ParcelConfig | null> = signal(null);
 
   constructor(private singleSpaService: SingleSpaService) {
