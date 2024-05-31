@@ -10,11 +10,6 @@ import { Sandbox } from 'src/app/sandbox';
     standalone: true,
     imports: [SuperLazy2Component, TestDirective]
 })
-export class SuperLazyComponent implements OnInit {
+export class SuperLazyComponent {
   sandbox = inject(Sandbox);
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

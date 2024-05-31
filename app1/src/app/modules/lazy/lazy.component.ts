@@ -11,11 +11,6 @@ import { Sandbox } from 'src/app/sandbox';
     standalone: true,
     imports: [Lazy2Component, TestDirective, RouterOutlet]
 })
-export class LazyComponent implements OnInit {
+export class LazyComponent {
   sandbox = inject(Sandbox);
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, inject } from '@angular/core';
 import { Sandbox } from 'src/app/sandbox';
 
 @Directive({
@@ -6,7 +6,8 @@ import { Sandbox } from 'src/app/sandbox';
     standalone: true,
 })
 export class TestDirective {
-  constructor(private sandbox: Sandbox) {
+  private sandbox = inject(Sandbox);
+  constructor() {
     console.log(this.sandbox.getName());
   }
 }

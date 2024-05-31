@@ -6,11 +6,6 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./super-lazy2.component.css'],
     standalone: true
 })
-export class SuperLazy2Component implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+export class SuperLazy2Component {
 
 }

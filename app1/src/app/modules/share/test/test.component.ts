@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Sandbox } from 'src/app/sandbox';
 
 @Component({
@@ -7,13 +7,9 @@ import { Sandbox } from 'src/app/sandbox';
     styleUrls: ['./test.component.css'],
     standalone: true
 })
-export class TestComponent implements OnInit {
-
-  constructor(private sandbox: Sandbox) {
+export class TestComponent {
+  private sandbox = inject(Sandbox);
+  constructor() {
     console.log(this.sandbox.getName());
   }
-
-  ngOnInit() {
-  }
-
 }
