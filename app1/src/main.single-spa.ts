@@ -8,7 +8,6 @@ import { routes } from './app/routes';
 import { BrowserModule, bootstrapApplication, createApplication } from '@angular/platform-browser';
 import { AppSandbox } from './app/app-sandbox';
 import { Sandbox } from './app/sandbox';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { APP_BASE_HREF } from '@angular/common';
 import { createCustomElement } from '@angular/elements';
 import { AppElementComponent } from './app/app-element.component';

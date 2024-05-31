@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, input, output, signal } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnChanges, SimpleChanges, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppElementComponent } from './app-element.component';
 

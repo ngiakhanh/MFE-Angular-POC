@@ -1,4 +1,4 @@
-import { AfterViewChecked, CUSTOM_ELEMENTS_SCHEMA, Component, afterRender, inject, signal } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, afterRender, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, switchMap, tap } from 'rxjs';

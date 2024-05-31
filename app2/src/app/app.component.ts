@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, Input, signal } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, signal } from '@angular/core';
 
 @Component({
     selector: 'app2-root',

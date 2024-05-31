@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ElementRef, EmbeddedViewRef, Inject, Injectable, Renderer2, RendererFactory2, TemplateRef, ViewContainerRef, inject } from '@angular/core';
+import { ElementRef, EmbeddedViewRef, Injectable, RendererFactory2, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { of, mergeMap, Observable, map } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 

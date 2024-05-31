@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, Directive, Inject, Input, Renderer2, TemplateRef, ViewContainerRef, effect, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Directive, TemplateRef, ViewContainerRef, effect, inject, input } from '@angular/core';
 import { defer, of, mergeMap } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';

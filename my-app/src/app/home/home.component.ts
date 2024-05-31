@@ -1,5 +1,5 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, Injector, OnInit, TemplateRef, ViewChild, ViewContainerRef, WritableSignal, computed, inject, signal, viewChild } from '@angular/core';
-import { Observable, Subscribable, catchError, defer, mergeMap, of } from 'rxjs';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, Injector, OnInit, TemplateRef, ViewContainerRef, WritableSignal, computed, inject, signal, viewChild } from '@angular/core';
+import { catchError, defer, mergeMap, of } from 'rxjs';
 import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { DynamicElementLoaderService } from '../dynamic-element-loader.service';
