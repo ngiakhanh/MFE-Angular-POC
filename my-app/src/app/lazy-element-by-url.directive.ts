@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectorRef, Directive, Inject, Input, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, Inject, Input, Renderer2, TemplateRef, ViewContainerRef, effect, inject, input } from '@angular/core';
 import { defer, of, mergeMap } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';
@@ -9,51 +9,45 @@ import { Parcel } from 'single-spa';
     standalone: true
 })
 export class LazyElementByUrlDirective {
-  @Input('lazyElementByUrl') set url(v: string){
-    this._url = v;
-  }
+  url = input.required<string | undefined>({alias: 'lazyElementByUrl'});
 
-  get url(): string {
-    return this._url;
-  }
+  private currentParcel: Parcel | undefined;
+  private tagName!: string;
+  private currentMfeContainer: HTMLElement | undefined;
 
-  private _url!: string;
-  private _currentParcel: Parcel | undefined;
-  private _tagName!: string;
-  private _currentMfeContainer: HTMLElement | undefined;
-  constructor(
-    private singleSpaService: SingleSpaService,
-    private cdr: ChangeDetectorRef,
-    private template: TemplateRef<HTMLElement>,
-    private vcr: ViewContainerRef,
-    @Inject(DOCUMENT) private document: Document) {
-  }
+  private singleSpaService = inject(SingleSpaService);
+  private cdr = inject(ChangeDetectorRef);
+  private template = inject(TemplateRef<HTMLElement>);
+  private vcr = inject(ViewContainerRef);
+  private document = inject(DOCUMENT);
+  constructor() {
+    effect(() => {
+      this.tagName = this.getElementTag();
+      const url = this.url();
+      if (!url || !this.tagName) {
+        return;
+      }
 
-  ngOnChanges(): void {
-    this._tagName = this.getElementTag();
-    if (!this.url || !this._tagName) {
-      return;
-    }
-
-    this._currentMfeContainer ??= this.document.createElement('div');
-    defer(() =>
-      this._currentParcel && this._currentParcel.getStatus() === 'MOUNTED'
-        ? this._currentParcel.unmount()
-        : of(null)
-    ).pipe(
-      mergeMap(_ => this.singleSpaService.mountByUrl(this.url, this._currentMfeContainer!, {isElement: true})),
-      mergeMap(_ => customElements.whenDefined(this._tagName))
-    )
-    .subscribe(_ => {
-      this.vcr.clear();
-      this.vcr.createEmbeddedView(this.template);
-      this.cdr.markForCheck();
+      this.currentMfeContainer ??= this.document.createElement('div');
+      defer(() =>
+        this.currentParcel && this.currentParcel.getStatus() === 'MOUNTED'
+          ? this.currentParcel.unmount()
+          : of(null)
+      ).pipe(
+        mergeMap(_ => this.singleSpaService.mountByUrl(url, this.currentMfeContainer!, {isElement: true})),
+        mergeMap(_ => customElements.whenDefined(this.tagName))
+      )
+      .subscribe(_ => {
+        this.vcr.clear();
+        this.vcr.createEmbeddedView(this.template);
+        this.cdr.markForCheck();
+      });
     });
   }
 
   async ngOnDestroy() {
-    await this._currentParcel?.unmount()
-    this._currentMfeContainer?.remove();
+    await this.currentParcel?.unmount()
+    this.currentMfeContainer?.remove();
   }
 
   private getElementTag(): string {
