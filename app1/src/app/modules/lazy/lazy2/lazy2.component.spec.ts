@@ -1,18 +1,15 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Lazy2Component } from './lazy2.component';
 
 describe('Lazy2Component', () => {
   let component: Lazy2Component;
   let fixture: ComponentFixture<Lazy2Component>;
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
     imports: [Lazy2Component]
-})
+  })
     .compileComponents();
   }));
 

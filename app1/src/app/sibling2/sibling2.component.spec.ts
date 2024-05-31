@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { Sibling2Component } from './sibling2.component';
 
 describe('Sibling2Component', () => {

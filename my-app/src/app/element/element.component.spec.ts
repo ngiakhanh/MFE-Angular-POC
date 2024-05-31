@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ElementComponent } from './element.component';
 
 describe('ElementComponent', () => {
@@ -8,8 +7,8 @@ describe('ElementComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [ElementComponent]
-});
+      imports: [ElementComponent]
+    });
     fixture = TestBed.createComponent(ElementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

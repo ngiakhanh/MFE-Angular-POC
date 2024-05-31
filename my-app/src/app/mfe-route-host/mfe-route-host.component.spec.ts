@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MfeRouteHostComponent } from './mfe-route-host.component';
 
 describe('MfeRouteHostComponent', () => {
@@ -8,8 +7,8 @@ describe('MfeRouteHostComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [MfeRouteHostComponent]
-});
+      imports: [MfeRouteHostComponent]
+    });
     fixture = TestBed.createComponent(MfeRouteHostComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
