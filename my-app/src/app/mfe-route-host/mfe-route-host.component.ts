@@ -1,4 +1,4 @@
-import { AfterViewChecked, CUSTOM_ELEMENTS_SCHEMA, Component, signal } from '@angular/core';
+import { AfterViewChecked, CUSTOM_ELEMENTS_SCHEMA, Component, afterRender, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, switchMap, tap } from 'rxjs';
@@ -15,13 +15,17 @@ import { ParcelComponent } from 'single-spa-angular/parcel';
     imports: [ParcelComponent, LazyElementsModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class MfeRouteHostComponent implements AfterViewChecked {
+export class MfeRouteHostComponent {
   mountRootParcel = signal(mountRootParcel);
   config = signal<ParcelConfig | null>(null);
   isSingleSpa = signal<boolean | undefined>(undefined);
   tag = signal<string | null>(null);
   url = signal<string | null>(null);
-  constructor(private route: ActivatedRoute, private singleSpaService: SingleSpaService, private router: Router) {
+
+  private route = inject(ActivatedRoute);
+  private singleSpaService = inject(SingleSpaService);
+  private router = inject(Router);
+  constructor() {
     this.route.data.pipe(
       switchMap(
         (data: any) => {
@@ -45,11 +49,11 @@ export class MfeRouteHostComponent implements AfterViewChecked {
       takeUntilDestroyed(),
     )
     .subscribe();
-  }
 
-  ngAfterViewChecked(): void {
-    if (document.querySelectorAll('mfe-page-not-found').length > 0) {
-      setTimeout(() => this.router.navigate(['notfound']));
-    }
+    afterRender(() => {
+      if (document.querySelectorAll('mfe-page-not-found').length > 0) {
+        setTimeout(() => this.router.navigate(['notfound']));
+      }
+    })
   }
 }
