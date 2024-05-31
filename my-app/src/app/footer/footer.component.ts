@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, WritableSignal, signal } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, WritableSignal, inject, signal } from '@angular/core';
 import { AppSettingsService } from 'src/service/app-settings.service';
 import { LazyElementsModule } from '@angular-extensions/elements';
 
@@ -12,7 +12,8 @@ import { LazyElementsModule } from '@angular-extensions/elements';
 })
 export class FooterComponent {
   footerUrl: WritableSignal<string> = signal('');
-  constructor(private appSettingsService: AppSettingsService) {
+  private appSettingsService = inject(AppSettingsService);
+  constructor() {
     this.footerUrl.set(this.appSettingsService.getMfeUrl('footer'));
   }
 }

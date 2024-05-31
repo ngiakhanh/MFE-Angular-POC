@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { IAppSettings } from 'src/type/app-settings.interface';
 
@@ -10,8 +10,7 @@ export class AppSettingsService {
 
   private appConfig: IAppSettings | undefined;
   appConfigMap: Map<string, {url: string, tag?: string, isSingleSpa: boolean}> = new Map();
-
-  constructor(private httpClient: HttpClient) { }
+  private httpClient = inject(HttpClient);
 
   loadAppConfig() {
     return firstValueFrom(this.httpClient.get<IAppSettings>('/assets/app-settings.json'))

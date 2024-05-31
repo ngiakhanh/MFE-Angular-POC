@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ElementRef, EmbeddedViewRef, Inject, Injectable, Renderer2, RendererFactory2, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ElementRef, EmbeddedViewRef, Inject, Injectable, Renderer2, RendererFactory2, TemplateRef, ViewContainerRef, inject } from '@angular/core';
 import { of, mergeMap, Observable, map } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 
@@ -7,14 +7,10 @@ import { SingleSpaService } from 'src/service/single-spa.service';
   providedIn: 'root'
 })
 export class DynamicElementLoaderService {
-  private _currentMfeContainer: HTMLElement | undefined;
-  private renderer: Renderer2;
-  constructor(
-    private singleSpaService: SingleSpaService,
-    private rendererFactory: RendererFactory2,
-    @Inject(DOCUMENT) private document: Document) {
-      this.renderer = this.rendererFactory.createRenderer(null, null);
-  }
+  private currentMfeContainer: HTMLElement | undefined;
+  private singleSpaService = inject(SingleSpaService);
+  private renderer = inject(RendererFactory2).createRenderer(null, null);
+  private document = inject(DOCUMENT);
 
   loadElement<T>(
     appName: string,
@@ -24,8 +20,8 @@ export class DynamicElementLoaderService {
       return of(undefined);
     }
 
-    this._currentMfeContainer ??= this.document.createElement('div');
-    return this.singleSpaService.mount(appName, this._currentMfeContainer!, {isElement: true}).pipe(
+    this.currentMfeContainer ??= this.document.createElement('div');
+    return this.singleSpaService.mount(appName, this.currentMfeContainer!, {isElement: true}).pipe(
       mergeMap(_ => customElements.whenDefined(tagName)),
       map(_ => {
         vcr.clear();
@@ -46,8 +42,8 @@ export class DynamicElementLoaderService {
       return of(undefined);
     }
 
-    this._currentMfeContainer ??= this.document.createElement('div');
-    return this.singleSpaService.mount(appName, this._currentMfeContainer!, {isElement: true}).pipe(
+    this.currentMfeContainer ??= this.document.createElement('div');
+    return this.singleSpaService.mount(appName, this.currentMfeContainer!, {isElement: true}).pipe(
       mergeMap(_ => customElements.whenDefined(tagName)),
       map(_ => {
         vcr.clear();

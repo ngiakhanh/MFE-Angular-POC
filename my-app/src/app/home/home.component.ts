@@ -23,7 +23,14 @@ import { HeaderComponent } from '../header/header.component';
     imports: [HeaderComponent, ParcelComponent, ElementComponent, LazyElementDirective, LazyDynamicElementDirective, LazyElementByUrlDirective, FooterComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class HomeComponent implements OnInit  {
+export class HomeComponent implements OnInit {
+  private element: (HTMLElement & {input: string}) | undefined;
+  private currentParcel: Parcel | undefined;
+  private injector: Injector = inject(Injector);
+  private singleSpaService = inject(SingleSpaService);
+  private dynamicElementLoaderService = inject(DynamicElementLoaderService);
+  private appSettingsService = inject(AppSettingsService);
+
   title: WritableSignal<string> = signal('shell');
   currentActiveApp = signal('app1');
   currentActiveTag = signal('app-one');
@@ -36,15 +43,6 @@ export class HomeComponent implements OnInit  {
   container = viewChild.required('container', {read: ViewContainerRef});
   container2 = viewChild.required('container2', {read: ViewContainerRef});
   template = viewChild.required('template', {read: TemplateRef});
-
-  private element: (HTMLElement & {input: string}) | undefined;
-  private currentParcel: Parcel | undefined;
-  private injector: Injector = inject(Injector);
-  constructor(
-    private singleSpaService: SingleSpaService,
-    private dynamicElementLoaderService: DynamicElementLoaderService,
-    public appSettingsService: AppSettingsService) {
-  }
 
   ngOnInit(): void {
     this.onClick(this.currentActiveApp());

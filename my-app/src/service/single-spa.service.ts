@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Parcel, ParcelConfig, mountRootParcel, CustomProps } from 'single-spa';
 import { Observable, defer, from, of } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
@@ -15,7 +15,7 @@ export class SingleSpaService {
     [url: string]: ParcelConfig | undefined;
   } = {};
 
-  constructor(private appSettingsService: AppSettingsService) { }
+  private appSettingsService = inject(AppSettingsService);
 
   fetchParcelConfig(url: string): Observable<ParcelConfig> {
     return !this.loadedParcelsByUrl[url]
