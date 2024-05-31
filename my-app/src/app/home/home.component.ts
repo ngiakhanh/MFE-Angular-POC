@@ -25,8 +25,8 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class HomeComponent implements OnInit  {
   title: WritableSignal<string> = signal('shell');
-  currentActiveApp = signal('app2');
-  currentActiveTag = signal('app-two');
+  currentActiveApp = signal('app1');
+  currentActiveTag = signal('app-one');
   mountRootParcel = signal(mountRootParcel);
   config: Signal<ParcelConfig | null> = signal(null);
   clickString = signal('');

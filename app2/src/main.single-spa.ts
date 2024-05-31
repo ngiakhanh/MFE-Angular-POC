@@ -1,18 +1,13 @@
-import { enableProdMode, NgZone, importProvidersFrom, provideExperimentalZonelessChangeDetection, provideZoneChangeDetection } from '@angular/core';
-
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, NgZone, importProvidersFrom } from '@angular/core';
 import { Router, NavigationStart, provideRouter } from '@angular/router';
-
 import { singleSpaAngular, getSingleSpaExtraProviders } from 'single-spa-angular';
-
-
-
 import { environment } from './environments/environment';
 import { singleSpaPropsSubject } from './single-spa/single-spa-props';
-import { AppElementModule } from './app/app-element.module';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/routes';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { BrowserModule, bootstrapApplication, createApplication } from '@angular/platform-browser';
+import { createCustomElement } from '@angular/elements';
+import { AppElementComponent } from './app/app-element.component';
 
 if (environment.production) {
   enableProdMode();
@@ -22,9 +17,21 @@ const lifecycles = singleSpaAngular({
   bootstrapFunction: singleSpaProps => {
     singleSpaPropsSubject.next(singleSpaProps);
     if ((singleSpaProps as any).isElement) {
-      return platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppElementModule);
+      return createApplication({providers: getSingleSpaExtraProviders()}).then(appRef => {
+        if (!customElements.get("app-two")) {
+          const element = createCustomElement(AppElementComponent, { injector: appRef.injector })
+          customElements.define("app-two", element);
+        }
+        return appRef;
+      });
     }
-    platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppElementModule);
+    createApplication({providers: getSingleSpaExtraProviders()}).then(appRef => {
+      if (!customElements.get("app-two")) {
+        const element = createCustomElement(AppElementComponent, { injector: appRef.injector })
+        customElements.define("app-two", element);
+      }
+      return appRef;
+    });
     return bootstrapApplication(AppComponent, {
       providers: [
         ...getSingleSpaExtraProviders(),

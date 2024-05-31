@@ -5,12 +5,13 @@ import { environment } from './environments/environment';
 import { singleSpaPropsSubject } from './single-spa/single-spa-props';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/routes';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { BrowserModule, bootstrapApplication, createApplication } from '@angular/platform-browser';
 import { AppSandbox } from './app/app-sandbox';
 import { Sandbox } from './app/sandbox';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { AppElementModule } from './app/app.element.module';
 import { APP_BASE_HREF } from '@angular/common';
+import { createCustomElement } from '@angular/elements';
+import { AppElementComponent } from './app/app-element.component';
 
 if (environment.production) {
   enableProdMode();
@@ -20,9 +21,21 @@ const lifecycles = singleSpaAngular({
   bootstrapFunction: singleSpaProps => {
     singleSpaPropsSubject.next(singleSpaProps);
     if ((singleSpaProps as any).isElement) {
-      return platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppElementModule);;
+      return createApplication({providers: getSingleSpaExtraProviders()}).then(appRef => {
+        if (!customElements.get("app-one")) {
+          const element = createCustomElement(AppElementComponent, { injector: appRef.injector })
+          customElements.define("app-one", element);
+        }
+        return appRef;
+      });
     }
-    platformBrowserDynamic(getSingleSpaExtraProviders()).bootstrapModule(AppElementModule);
+    createApplication({providers: getSingleSpaExtraProviders()}).then(appRef => {
+        if (!customElements.get("app-one")) {
+          const element = createCustomElement(AppElementComponent, { injector: appRef.injector })
+          customElements.define("app-one", element);
+        }
+        return appRef;
+      });
     return bootstrapApplication(AppComponent, {
       providers: [
           ...getSingleSpaExtraProviders(),

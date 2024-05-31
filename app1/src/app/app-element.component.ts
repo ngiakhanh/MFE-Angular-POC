@@ -1,19 +1,20 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, input, output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, input, output, signal } from '@angular/core';
 
-//Angular element does not support signals api and standalone
+//Angular element does not support signals api
 @Component({
     selector: 'app1-element',
     templateUrl: './app-element.component.html',
     styleUrls: [],
+    standalone: true
 })
 export class AppElementComponent implements OnChanges {
-  @Input() input: string = 'No input';
+  @Input('input') input = 'No input';
   @Output('customClick') clickEvent = new EventEmitter();
 
   handleClick = () => {
     this.clickEvent.emit(new Date());
   }
-  title = 'app1';
+
   ngOnChanges(changes: SimpleChanges): void {
     console.log("onChanges trigger from app-element");
   }
