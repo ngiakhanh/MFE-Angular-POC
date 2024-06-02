@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-//Angular element does not support signals api
+//Angular element does not support signals input/output api https://github.com/angular/angular/issues/53981
 @Component({
     selector: 'app2-element',
     templateUrl: './app-element.component.html',

@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
   currentActiveTag = signal('app-one');
   mountRootParcel = signal(mountRootParcel);
   config: Signal<ParcelConfig | null> = signal(null);
-  clickString = signal('');
+  clickString = signal('test element input');
   mfeUrl = computed(() => this.appSettingsService.getMfeUrl(this.currentActiveApp()));
 
   container0 = viewChild.required('container0', {read: ElementRef});
