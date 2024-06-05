@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, Injector, OnInit, TemplateRef, ViewContainerRef, WritableSignal, computed, inject, signal, viewChild } from '@angular/core';
-import { catchError, defer, mergeMap, of } from 'rxjs';
+import { catchError, defer, mergeMap, of, tap } from 'rxjs';
 import { ParcelConfig, mountRootParcel } from 'single-spa';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { DynamicElementLoaderService } from '../dynamic-element-loader.service';
@@ -32,8 +32,8 @@ export class HomeComponent implements OnInit {
   private appSettingsService = inject(AppSettingsService);
 
   title: WritableSignal<string> = signal('shell');
-  currentActiveApp = signal('app1');
-  currentActiveTag = signal('app-one');
+  currentActiveApp = signal('app2');
+  currentActiveTag = signal('app-two');
   mountRootParcel = signal(mountRootParcel);
   config: Signal<ParcelConfig | null> = signal(null);
   clickString = signal('test element input');
@@ -64,6 +64,7 @@ export class HomeComponent implements OnInit {
     else {
       this.currentActiveTag.set('app-two');
     }
+    this.clickString.set(new Date().getTime().toString());
 
     //MFE Single SPA Parcel Component
     this.config = toSignal(this.singleSpaService.getMfeParcelConfig(appName), { initialValue: null, injector: this.injector });
@@ -71,12 +72,12 @@ export class HomeComponent implements OnInit {
     //Manual MFE Parcel Mount
     defer(() =>
       this.currentParcel && this.currentParcel.getStatus() === 'MOUNTED'
-        ? this.currentParcel.unmount()
+        ? this.currentParcel.unmount().then(_ => this.container0().nativeElement.removeChild(this.container0().nativeElement.firstChild))
         : of(null)
     )
     .pipe(
       mergeMap(_ => this.singleSpaService.mount(appName, this.container0().nativeElement)),
-      catchError(err => of(null))
+      catchError(_ => of(null))
     )
     .subscribe((parcel: any) => {
       this.currentParcel = parcel;

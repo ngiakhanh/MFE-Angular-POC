@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectorRef, Directive, TemplateRef, ViewContainerRef, effect, inject, input } from '@angular/core';
-import { defer, of, mergeMap } from 'rxjs';
+import { defer, of, mergeMap, catchError } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 import { Parcel } from 'single-spa';
 
@@ -24,6 +24,7 @@ export class LazyElementDirective {
     effect(() => {
       this.tagName = this.getElementTag();
       const appName = this.appName();
+      this.vcr.clear();
       if (!appName || !this.tagName) {
         return;
       }
@@ -35,10 +36,10 @@ export class LazyElementDirective {
           : of(null)
       ).pipe(
         mergeMap(_ => this.singleSpaService.mount(appName, this.currentMfeContainer!, {isElement: true})),
-        mergeMap(_ => customElements.whenDefined(this.tagName))
+        mergeMap(_ => customElements.whenDefined(this.tagName)),
+        catchError(_ => (of(undefined)))
       )
       .subscribe(_ => {
-        this.vcr.clear();
         this.vcr.createEmbeddedView(this.template);
         this.cdr.markForCheck();
       });

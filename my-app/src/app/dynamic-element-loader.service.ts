@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { ElementRef, EmbeddedViewRef, Injectable, RendererFactory2, TemplateRef, ViewContainerRef, inject } from '@angular/core';
-import { of, mergeMap, Observable, map } from 'rxjs';
+import { of, mergeMap, Observable, map, catchError } from 'rxjs';
 import { SingleSpaService } from 'src/service/single-spa.service';
 
 @Injectable({
@@ -16,20 +16,20 @@ export class DynamicElementLoaderService {
     appName: string,
     tagName: string,
     vcr: ViewContainerRef): Observable<HTMLElement & T | undefined>{
+    vcr.clear();
     if (!appName || !tagName || !vcr) {
       return of(undefined);
     }
-
     this.currentMfeContainer ??= this.document.createElement('div');
     return this.singleSpaService.mount(appName, this.currentMfeContainer!, {isElement: true}).pipe(
       mergeMap(_ => customElements.whenDefined(tagName)),
       map(_ => {
-        vcr.clear();
         const element: HTMLElement & T = this.document.createElement(tagName) as any;
         const beforeNode = (vcr.element as ElementRef<HTMLElement>).nativeElement;
         beforeNode.parentNode?.insertBefore(element, beforeNode.nextSibling);
         return element;
-      })
+      }),
+      catchError(_ => (of(undefined)))
     );
   }
 
@@ -38,15 +38,14 @@ export class DynamicElementLoaderService {
     tagName: string,
     vcr: ViewContainerRef,
     template: TemplateRef<HTMLElement>): Observable<EmbeddedViewRef<HTMLElement> | undefined> {
+    vcr.clear();
     if (!appName || !tagName || !vcr) {
       return of(undefined);
     }
-
     this.currentMfeContainer ??= this.document.createElement('div');
     return this.singleSpaService.mount(appName, this.currentMfeContainer!, {isElement: true}).pipe(
       mergeMap(_ => customElements.whenDefined(tagName)),
       map(_ => {
-        vcr.clear();
         const originalCreateElement = this.renderer.createElement;
         this.renderer.createElement = (name: string, namespace: string) => {
           return this.document.createElement(tagName);
@@ -54,7 +53,8 @@ export class DynamicElementLoaderService {
         const viewRef = vcr.createEmbeddedView(template);
         this.renderer.createElement = originalCreateElement;
         return viewRef;
-      })
+      }),
+      catchError(_ => (of(undefined)))
     )
   }
 }
