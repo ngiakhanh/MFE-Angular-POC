@@ -32,8 +32,8 @@ export class HomeComponent implements OnInit {
   private appSettingsService = inject(AppSettingsService);
 
   title: WritableSignal<string> = signal('shell');
-  currentActiveApp = signal('app2');
-  currentActiveTag = signal('app-two');
+  currentActiveApp = signal('app1');
+  currentActiveTag = signal('app-one');
   mountRootParcel = signal(mountRootParcel);
   config: Signal<ParcelConfig | null> = signal(null);
   clickString = signal('test element input');
@@ -72,7 +72,7 @@ export class HomeComponent implements OnInit {
     //Manual MFE Parcel Mount
     defer(() =>
       this.currentParcel && this.currentParcel.getStatus() === 'MOUNTED'
-        ? this.currentParcel.unmount().then(_ => this.container0().nativeElement.removeChild(this.container0().nativeElement.firstChild))
+        ? this.currentParcel.unmount().then(_ => this.container0().nativeElement.replaceChildren())
         : of(null)
     )
     .pipe(
